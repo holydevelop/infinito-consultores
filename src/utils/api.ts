@@ -10,6 +10,6 @@ export async function registeruser(data: FormData){
     "rut":"olapepe",
     "cellphone":"1234567"
 }
-  const res = await Axios.post("/users",msg)
+  const res = await Axios.post("http://localhost:3000/users",msg)
   console.log(res)
 }
