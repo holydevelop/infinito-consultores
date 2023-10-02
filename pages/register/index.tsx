@@ -32,6 +32,7 @@ export function Calendar({ setDate }) {
       <DatePicker 
         onChange={handleDateChange}
         label="Fecha de nacimiento"
+        format="DD/MM/YY"
       />
     </LocalizationProvider>
   );
