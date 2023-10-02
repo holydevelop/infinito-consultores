@@ -1,5 +1,4 @@
 import Axios from "axios";
-import { User } from "./user";
 
 export async function registeruser(data: FormData){
   const msg: any = {
