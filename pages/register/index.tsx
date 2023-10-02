@@ -21,18 +21,15 @@ import { User } from '@/utils/user';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export function Calendar() {
-
-  const [selectedDate, setSelectedDate] = React.useState(null)
+export function Calendar({ setDate }) {
 
   const handleDateChange = (date: any) => {
-    setSelectedDate(date);
+    setDate(date);
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker 
-        value={selectedDate}
         onChange={handleDateChange}
         label="Fecha de nacimiento"
       />
@@ -43,9 +40,6 @@ export function Calendar() {
 export default function SignUp() {
 
   const [date,setDate] = React.useState(new Date())
-  const handleDateChange = (date: Date) => {
-    setDate(date)
-  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -149,7 +143,7 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Grid container justifyContent="flex-end">
-              <Calendar/>
+              <Calendar setDate={setDate}/>
             </Grid>
           </Box>
         </Box>
