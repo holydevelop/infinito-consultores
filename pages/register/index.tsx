@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -18,30 +16,51 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { registeruser } from '@/utils/api';
+import { User } from '@/utils/user';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export function Calendar() {
+
+  const [selectedDate, setSelectedDate] = React.useState(null)
+
+  const handleDateChange = (date: any) => {
+    setSelectedDate(date);
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker />
+      <DatePicker 
+        value={selectedDate}
+        onChange={handleDateChange}
+        label="Fecha de nacimiento"
+      />
     </LocalizationProvider>
   );
 }
 
 export default function SignUp() {
+
+  const [date,setDate] = React.useState(new Date())
+  const handleDateChange = (date: Date) => {
+    setDate(date)
+  }
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const user: FormData = {
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
-      rut: data.get('rut'),
-      email: data.get('email'),
-      password: data.get('password'),
+    const user: User = {
+      email: String(data.get('email')),
+      name: `${data.get('firstName')} ${data.get('lastName')}`,
+      password: String(data.get('password')),
+      dateofbirth: date,
+      rut: String(data.get('rut')),
+      profession: "INFORMATICA",
+      cellphone: "829319328"      
     }
-    registeruser(user)
+    console.log(user)
+    //registeruser(user)
   };
 
   return (
