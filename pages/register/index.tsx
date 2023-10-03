@@ -17,6 +17,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { registeruser } from '@/utils/api';
 import { User } from '@/utils/user';
+import { relative } from 'path';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -29,9 +30,10 @@ export function Calendar({ setDate }) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker 
+      <DatePicker
         onChange={handleDateChange}
         label="Fecha de nacimiento"
+        format="DD/MM/YY"
       />
     </LocalizationProvider>
   );
@@ -39,7 +41,7 @@ export function Calendar({ setDate }) {
 
 export default function SignUp() {
 
-  const [date,setDate] = React.useState(new Date())
+  const [date, setDate] = React.useState(new Date())
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,13 +50,13 @@ export default function SignUp() {
       email: String(data.get('email')),
       name: `${data.get('firstName')} ${data.get('lastName')}`,
       password: String(data.get('password')),
-      dateofbirth: date,
+      dateofbirth: new Date(date),
       rut: String(data.get('rut')),
-      profession: "INFORMATICA",
-      cellphone: "829319328"      
+      cellphone: String(data.get('cellphone')),
+      profession: "INFORMATICA"
     }
-    console.log(user)
-    //registeruser(user)
+
+    registeruser(user)
   };
 
   return (
@@ -63,7 +65,7 @@ export default function SignUp() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 2,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -125,25 +127,34 @@ export default function SignUp() {
                   id="password"
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="cellphone"
+                  label="Telefono / Celular"
+                  type="string"
+                  id="cellphone"
+                />
+              </Grid>
+              <Grid item xs={12} style={{position: 'relative', left: '65px'}}>
+                <Calendar setDate={setDate} />
+              </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 5, mb: 2 }}
-
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="flex-end" style={{position: 'relative', left: '-95px'}}>
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
+                <Link href="/login" variant="body2">
+                  Ya tienes cuenta? Inicia sesion
                 </Link>
               </Grid>
-            </Grid>
-            <Grid container justifyContent="flex-end">
-              <Calendar setDate={setDate}/>
             </Grid>
           </Box>
         </Box>
