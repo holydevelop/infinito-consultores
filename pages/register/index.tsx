@@ -116,7 +116,7 @@ export default function SignUp() {
                     borderColor: formErrors.firstName && formSubmitted ? 'red' : 'initial',
                   }}
                 />
-
+              
                 {formErrors.firstName && formSubmitted && (
                   <p style={{ color: 'red' }}>{formErrors.firstName}</p>
                 )}
