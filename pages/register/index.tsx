@@ -46,17 +46,72 @@ export default function SignUp() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const user: User = {
-      email: String(data.get('email')),
-      name: `${data.get('firstName')} ${data.get('lastName')}`,
-      password: String(data.get('password')),
-      dateofbirth: new Date(date),
-      rut: String(data.get('rut')),
-      cellphone: String(data.get('cellphone')),
-      profession: "INFORMATICA"
+  
+    // Validate form data
+    const firstName = String(data.get('firstName'));
+    const lastName = String(data.get('lastName'));
+    const email = String(data.get('email'));
+    const password = String(data.get('password'));
+    const rut = String(data.get('rut'));
+    const cellphone = String(data.get('cellphone'));
+    const dateOfBirth = new Date(date);
+  
+    if (!validations.isNotEmpty(firstName)) {
+      // Handle empty firstName error
+      return;
     }
-
-    registeruser(user)
+  
+    if (!validations.isNotEmpty(lastName)) {
+      // Handle empty lastName error
+      return;
+    }
+  
+    if (!validations.isNotEmpty(email)) {
+      // Handle empty email error
+      return;
+    }
+  
+    if (!validations.isValidEmail(email)) {
+      // Handle invalid email error
+      return;
+    }
+  
+    if (!validations.isNotEmpty(password)) {
+      // Handle empty password error
+      return;
+    }
+  
+    if (!validations.isNotEmpty(rut)) {
+      // Handle empty rut error
+      return;
+    }
+  
+    if (!validations.isValidRut(rut)) {
+      // Handle invalid rut error
+      return;
+    }
+  
+    if (!validations.isNotEmpty(cellphone)) {
+      // Handle empty cellphone error
+      return;
+    }
+  
+    if (!validations.isValidCellphone(cellphone)) {
+      // Handle invalid cellphone error
+      return;
+    }
+  
+    const user: User = {
+      email,
+      name: `${firstName} ${lastName}`,
+      password,
+      dateofbirth: dateOfBirth,
+      rut,
+      cellphone,
+      profession: "INFORMATICA"
+    };
+  
+    registeruser(user);
   };
 
   return (
