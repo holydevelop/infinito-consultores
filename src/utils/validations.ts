@@ -19,4 +19,5 @@ function validPassword(password: string) {
 
 function validRut(rut: string) {
   // Implement RUT validation logic here
+  // TODO: Implement RUT validation logic
 }
