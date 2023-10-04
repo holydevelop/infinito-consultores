@@ -17,7 +17,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { registeruser } from '@/utils/api';
 import { User } from '@/utils/user';
-import { relative } from 'path';
+import { validData } from '@/utils/validations';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -42,21 +42,45 @@ export function Calendar({ setDate }) {
 export default function SignUp() {
 
   const [date, setDate] = React.useState(new Date())
+  const [formErrors, setFormErrors] = React.useState({});
+  const [formSubmitted, setFormSubmitted] = React.useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const user: User = {
+
+    // Validaciones utilizando la función validData
+    const { isValid, errors } = validData({
       email: String(data.get('email')),
-      name: `${data.get('firstName')} ${data.get('lastName')}`,
       password: String(data.get('password')),
-      dateofbirth: new Date(date),
-      rut: String(data.get('rut')),
-      cellphone: String(data.get('cellphone')),
-      profession: "INFORMATICA"
+      firstName: String(data.get('firstName')),
+      lastName: String(data.get('lastName')),
+      fecha: String(date),
+      telefono: String(data.get('cellphone')),
+    });
+
+    // Actualiza el estado 'formErrors' con los mensajes de error
+    setFormErrors(errors);
+
+    // Marca el formulario como enviado
+    setFormSubmitted(true);
+
+    // Si todas las validaciones son exitosas, puedes crear el objeto de usuario
+    if (isValid) {
+      const user = {
+        email: String(data.get('email')),
+        name: `${String(data.get('firstName'))} ${String(data.get('lastName'))}`,
+        password: String(data.get('password')),
+        dateofbirth: new Date(date),
+        rut: String(data.get('rut')),
+        cellphone: String(data.get('cellphone')),
+        profession: "INFORMATICA"
+      };
+      // Luego puedes llamar a la función para registrar al usuario
+      // registeruser(user)
     }
 
-    registeruser(user)
+    console.log("Clickeado");
   };
 
   return (
@@ -88,7 +112,14 @@ export default function SignUp() {
                   id="firstName"
                   label="Nombre"
                   autoFocus
+                  style={{
+                    borderColor: formErrors.firstName && formSubmitted ? 'red' : 'initial',
+                  }}
                 />
+
+                {formErrors.firstName && formSubmitted && (
+                  <p style={{ color: 'red' }}>{formErrors.firstName}</p>
+                )}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -137,7 +168,7 @@ export default function SignUp() {
                   id="cellphone"
                 />
               </Grid>
-              <Grid item xs={12} style={{position: 'relative', left: '65px'}}>
+              <Grid item xs={12} container justifyContent={"center"}>
                 <Calendar setDate={setDate} />
               </Grid>
             </Grid>
@@ -149,7 +180,7 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end" style={{position: 'relative', left: '-95px'}}>
+            <Grid container justifyContent="center">
               <Grid item>
                 <Link href="/login" variant="body2">
                   Ya tienes cuenta? Inicia sesion
