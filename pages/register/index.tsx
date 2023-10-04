@@ -24,7 +24,7 @@ const defaultTheme = createTheme();
 
 export function Calendar({ setDate }) {
 
-  const handleDateChange = (date: any) => {
+  const handleDateChange = (date: Date) => {
     setDate(date);
   };
 
@@ -41,7 +41,7 @@ export function Calendar({ setDate }) {
 
 export default function SignUp() {
 
-  const [date, setDate] = React.useState(new Date())
+  const [date, setDate] = React.useState(new Date());
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -54,52 +54,54 @@ export default function SignUp() {
     const password = String(data.get('password'));
     const rut = String(data.get('rut'));
     const cellphone = String(data.get('cellphone'));
-    const dateOfBirth = new Date(date);
-  
+    const dateOfBirth = date;
+    
     if (!validations.isNotEmpty(firstName)) {
       // Handle empty firstName error
       return;
     }
-  
+    
     if (!validations.isNotEmpty(lastName)) {
       // Handle empty lastName error
       return;
     }
-  
+    
     if (!validations.isNotEmpty(email)) {
       // Handle empty email error
       return;
     }
-  
+    
     if (!validations.isValidEmail(email)) {
       // Handle invalid email error
       return;
     }
-  
+    
     if (!validations.isNotEmpty(password)) {
       // Handle empty password error
       return;
     }
-  
+    
     if (!validations.isNotEmpty(rut)) {
       // Handle empty rut error
       return;
     }
-  
+    
     if (!validations.isValidRut(rut)) {
       // Handle invalid rut error
       return;
     }
-  
+    
     if (!validations.isNotEmpty(cellphone)) {
       // Handle empty cellphone error
       return;
     }
-  
+    
     if (!validations.isValidCellphone(cellphone)) {
       // Handle invalid cellphone error
       return;
     }
+  
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
   
     const user: User = {
       email,
