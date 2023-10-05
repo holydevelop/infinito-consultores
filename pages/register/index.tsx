@@ -15,14 +15,17 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { registeruser } from '@/utils/api';
+import { registerUser } from '@/utils/api';
 import { User } from '@/utils/user';
+import AlertRegister from '../../components/AlertRegister';
 import { validData } from '@/utils/validations';
+import Loading from '../../components/Loading';
+import { Alert, Dialog } from '@mui/material';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export function Calendar({ setDate }) {
+function Calendar({ setDate }: any) {
 
   const handleDateChange = (date: any) => {
     setDate(date);
@@ -40,47 +43,65 @@ export function Calendar({ setDate }) {
 }
 
 export default function SignUp() {
-
-  const [date, setDate] = React.useState(new Date())
+  //UseState para la fecha sirve para recibir la fecha
+  const [date, setDate]: any = React.useState(null)
+  //Dialog sirve para mostrar el dialogo una vez que se clickea al registrar
+  const [dialogOpen, setIsDialogOpenLocally] = React.useState(false)
+  //Informacion de error en los formularios para AlertRegister
   const [formErrors, setFormErrors] = React.useState({});
-  const [formSubmitted, setFormSubmitted] = React.useState(false);
+  //Estado de carga
+  const [isLoading, setIsLoading] = React.useState(false);
+  //Error duplicado
+  const [errorEmail, setErrorEmail] = React.useState(false)
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  // Función para cerrar el Dialog
+  const handleClose = () => {
+    setIsDialogOpenLocally(false);
+  };
+
+  //Funcion al darle al boton de enviar
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true)
     const data = new FormData(event.currentTarget);
-
-    // Validaciones utilizando la función validData
-    const { isValid, errors } = validData({
+    const user = {
       email: String(data.get('email')),
       password: String(data.get('password')),
-      firstName: String(data.get('firstName')),
-      lastName: String(data.get('lastName')),
-      fecha: String(date),
-      telefono: String(data.get('cellphone')),
-    });
+      dateofbirth: date,
+      rut: String(data.get('rut')),
+      cellphone: String(data.get('cellphone')),
+      profession: "INFORMATICA",
+      name: `${data.get('firstName')} ${data.get('lastName')}`
+    };
+    // Validaciones utilizando la función validData
+    const { errors } = validData(user);
+    // Validacion de fecha
+    if (!date) { //Funcion por error de pasar la fecha
+      errors.dateofbirth = "Selecciona una fecha de nacimiento"
+    }
+    setFormErrors(errors)
 
-    // Actualiza el estado 'formErrors' con los mensajes de error
-    setFormErrors(errors);
-
-    // Marca el formulario como enviado
-    setFormSubmitted(true);
-
-    // Si todas las validaciones son exitosas, puedes crear el objeto de usuario
-    if (isValid) {
-      const user = {
-        email: String(data.get('email')),
-        name: `${String(data.get('firstName'))} ${String(data.get('lastName'))}`,
-        password: String(data.get('password')),
-        dateofbirth: new Date(date),
-        rut: String(data.get('rut')),
-        cellphone: String(data.get('cellphone')),
-        profession: "INFORMATICA"
-      };
-      // Luego puedes llamar a la función para registrar al usuario
-      // registeruser(user)
+    // Verificar si hay errores generales en el formulario
+    const hasGeneralErrors = Object.keys(errors).some((fieldName) => fieldName !== "email");
+    if (hasGeneralErrors) {
+      setIsDialogOpenLocally(true);
+      setIsLoading(false);
+      return;
     }
 
-    console.log("Clickeado");
+    const res = await registerUser(user);
+
+    if (res.statusCode === 400) {
+      setErrorEmail(true);
+      setIsLoading(false);
+      return;
+    }else{
+      setIsDialogOpenLocally(true);
+      setIsLoading(false);
+      return;
+    }
+
+    
   };
 
   return (
@@ -112,15 +133,15 @@ export default function SignUp() {
                   id="firstName"
                   label="Nombre"
                   autoFocus
-                  style={{
-                    borderColor: formErrors.firstName && formSubmitted ? 'red' : 'initial',
-                  }}
                 />
-
-                {formErrors.firstName && formSubmitted && (
-                  <p style={{ color: 'red' }}>{formErrors.firstName}</p>
-                )}
               </Grid>
+              <Dialog open={errorEmail}>
+                <Alert severity="error" >
+                  <h1>Error al crear la cuenta</h1>
+                  <p>Verifique que el correo electronico no este duplicado</p>
+                  <Button onClick={() => { setErrorEmail(false) }}>Cerrar</Button>
+                </Alert>
+              </Dialog>
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -163,7 +184,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="cellphone"
-                  label="Telefono / Celular"
+                  label="Telefono / Celular (Añadir +56 9 o 2)"
                   type="string"
                   id="cellphone"
                 />
@@ -178,8 +199,9 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 5, mb: 2 }}
             >
-              Sign Up
+              Registrarse
             </Button>
+            <Loading isLoading={isLoading} />
             <Grid container justifyContent="center">
               <Grid item>
                 <Link href="/login" variant="body2">
@@ -187,6 +209,12 @@ export default function SignUp() {
                 </Link>
               </Grid>
             </Grid>
+            <AlertRegister
+              isDialogOpen={dialogOpen}
+              handleClose={handleClose}
+              validations={formErrors}
+              alertType={Object.keys(formErrors).length === 0}
+            />
           </Box>
         </Box>
       </Container>

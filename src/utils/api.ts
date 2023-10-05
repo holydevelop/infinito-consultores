@@ -2,12 +2,15 @@ import Axios from "axios";
 import { User } from "./user";
 
 //Register user with POST in API
-export async function registeruser(data: User){
+export async function registerUser(data: User){
   try {
     const res = await Axios.post("http://3.237.252.239:8080/users",data)
-    console.log(res)
+    return res
   } catch (error) {
-    console.log(error)
+    return {
+      statusCode: error.response.data.statusCode,
+      error: error.response.data.error
+    }
   }
 
 }
