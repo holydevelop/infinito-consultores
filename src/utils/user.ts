@@ -7,3 +7,9 @@ export interface User{
   rut: String,
   cellphone: String
 }
+
+export interface LoginUser{
+  email: String,
+  password: String
+
+}

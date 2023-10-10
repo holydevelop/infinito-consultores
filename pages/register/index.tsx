@@ -82,14 +82,14 @@ export default function SignUp() {
     setFormErrors(errors)
 
     // Verificar si hay errores generales en el formulario
-    const hasGeneralErrors = Object.keys(errors).some((fieldName) => fieldName !== "email");
+    const hasGeneralErrors = Object.values(errors).some((error) => error !== "");
     if (hasGeneralErrors) {
       setIsDialogOpenLocally(true);
       setIsLoading(false);
       return;
     }
 
-    const res = await registerUser(user);
+    const res: any = await registerUser(user);
 
     if (res.statusCode === 400) {
       setErrorEmail(true);
@@ -101,7 +101,6 @@ export default function SignUp() {
       return;
     }
 
-    
   };
 
   return (
@@ -120,7 +119,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Registrarse
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
