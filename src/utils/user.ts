@@ -8,8 +8,7 @@ export interface User{
   cellphone: String
 }
 
-export interface LoginUser{
+export interface UserLogin{
   email: String,
   password: String
-
 }

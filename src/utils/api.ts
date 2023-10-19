@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { LoginUser, User } from "./user";
+import { UserLogin, User } from "./user";
 
 //Register user with POST in API
 export async function registerUser(data: User){
@@ -17,12 +17,12 @@ export async function registerUser(data: User){
 }
 
 //Login user with POST in API
-export async function loginUser(data: LoginUser){
+export async function loginUser(data: UserLogin){
   try{
     const res = await Axios.post(`${process.env.URL_API}/auth/login`,data)
-    console.log(res)
+    return res
   }catch(error: any){
-    console.log(error)
+    throw error
   }
 }
 

@@ -1,9 +1,12 @@
-import { Backdrop, CircularProgress } from "@mui/material";
+"use client"
+import { Button } from "@mui/material";
+import { Navbar } from "../components/Navbar";
 
-export default function Home() {
+export default function App() {
   return (
-    <main>
-      <h1>Home</h1>
-    </main>
+    <div>
+      <Navbar />
+      <h1 className="text-2x1font-bold">Home Page</h1>
+    </div>
   )
 }

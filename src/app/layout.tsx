@@ -1,3 +1,4 @@
+import SessionAuthProvider from '@/context/SessionAuthProvider'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -11,8 +12,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="es">
+      <body>
+        <main>
+          <SessionAuthProvider>{children}</SessionAuthProvider>
+        </main>
+      </body>
     </html>
   )
 }
