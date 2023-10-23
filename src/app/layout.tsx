@@ -1,5 +1,8 @@
+import SessionManager from '@/components/SessionManager'
 import SessionAuthProvider from '@/context/SessionAuthProvider'
+import { Providers } from '@/redux/providers'
 import type { Metadata } from 'next'
+import { useSession } from 'next-auth/react'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,7 +18,13 @@ export default function RootLayout({
     <html lang="es">
       <body>
         <main>
-          <SessionAuthProvider>{children}</SessionAuthProvider>
+          <SessionAuthProvider>
+            <Providers>
+              <SessionManager>
+                {children}
+              </SessionManager>
+            </Providers>
+          </SessionAuthProvider>
         </main>
       </body>
     </html>

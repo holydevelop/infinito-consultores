@@ -1,14 +1,21 @@
 "use client"
 
 import React from 'react'
-import { useSession } from 'next-auth/react'
-
 import './../app/globals.css'
+import { getUserState } from '@/utils/getReduxState'
+
+function isObjectNotEmpty(obj: Record<string, string>) {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key) && (obj[key] === "" || obj[key] === null)) {
+      return false;
+    }
+  }
+  return true;
+}
 
 export const Navbar = () => {
-
-  const {data:session} = useSession()
-
+  const user = getUserState()
+  const session = isObjectNotEmpty(user)
   return (
     <nav className="bg-blue-500 border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -38,7 +45,7 @@ export const Navbar = () => {
               //Si la variable testvar es true entonces devuelve el dashboard
               session ?
                 <li>
-                  <a href="/dashboard" className="block py-2 pl-3 pr-4 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-black md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Profile</a>
+                  <a href="/dashboard" className="block py-2 pl-3 pr-4 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-black md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">{user.name}</a>
                 </li>
                 :
                 null

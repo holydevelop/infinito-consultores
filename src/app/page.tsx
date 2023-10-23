@@ -6,7 +6,6 @@ export default function App() {
   return (
     <div>
       <Navbar />
-      <h1 className="text-2x1font-bold">Home Page</h1>
     </div>
   )
 }

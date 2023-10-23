@@ -2,10 +2,11 @@ export interface User{
   email: String,
   name: String,
   password: String,
-  dateofbirth: Date,
+  dob: Date,
   profession: String,
   rut: String,
-  cellphone: String
+  cellphone: String,
+  rol: String
 }
 
 export interface UserLogin{

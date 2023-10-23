@@ -18,7 +18,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { registerUser } from '@/utils/api';
-import { User } from '@/utils/user';
 
 import { validData } from '@/utils/validations';
 import Loading from '../../components/Loading';

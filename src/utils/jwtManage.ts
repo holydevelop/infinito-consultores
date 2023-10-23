@@ -1,5 +1,5 @@
-export async function desencryptJwt(token: string) {
+export async function decryptJwt(token: string){
   const jwt = require('jsonwebtoken')
-  const decoded = jwt.decode(token)
-  console.log(decoded)
+  const decoded = await jwt.decode(token)
+  return decoded
 }
