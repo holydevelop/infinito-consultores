@@ -29,7 +29,7 @@ export default function SignIn() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+    console.log(process.env.URL_API)
     const resNextAuth = await signIn("credentials", {
       email: String(data.get("email")),
       password: String(data.get("password")),
@@ -37,7 +37,7 @@ export default function SignIn() {
     })
 
     if (resNextAuth?.error) {
-      console.log("Error nextauth")
+      console.log(resNextAuth?.error)
       return
     }
 

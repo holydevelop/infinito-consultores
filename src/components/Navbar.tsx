@@ -45,7 +45,7 @@ export const Navbar = () => {
               //Si la variable testvar es true entonces devuelve el dashboard
               session ?
                 <li>
-                  <a href="/dashboard" className="block py-2 pl-3 pr-4 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-black md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">{user.name}</a>
+                  <a href={`/profile/${user.id}`} className="block py-2 pl-3 pr-4 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-black md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">{user.name}</a>
                 </li>
                 :
                 null
