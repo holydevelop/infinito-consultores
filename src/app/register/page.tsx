@@ -49,6 +49,16 @@ export default function SignUp() {
 
   const router = useRouter()
   const { data: session, status } = useSession()
+  //UseState para la fecha sirve para recibir la fecha
+  const [date, setDate]: any = React.useState(null)
+  //Dialog sirve para mostrar el dialogo una vez que se clickea al registrar
+  const [dialogOpen, setIsDialogOpenLocally] = React.useState(false)
+  //Informacion de error en los formularios para AlertRegister
+  const [formErrors, setFormErrors] = React.useState({});
+  //Estado de carga
+  const [isLoading, setIsLoading] = React.useState(false);
+  //Error duplicado
+  const [errorEmail, setErrorEmail] = React.useState(false)
 
   if (status === "loading") {
     return (<Loading isLoading={true} />)
@@ -59,17 +69,6 @@ export default function SignUp() {
   }
 
   if (status === "unauthenticated") {
-    //UseState para la fecha sirve para recibir la fecha
-    const [date, setDate]: any = React.useState(null)
-    //Dialog sirve para mostrar el dialogo una vez que se clickea al registrar
-    const [dialogOpen, setIsDialogOpenLocally] = React.useState(false)
-    //Informacion de error en los formularios para AlertRegister
-    const [formErrors, setFormErrors] = React.useState({});
-    //Estado de carga
-    const [isLoading, setIsLoading] = React.useState(false);
-    //Error duplicado
-    const [errorEmail, setErrorEmail] = React.useState(false)
-
     //Funcion al darle al boton de enviar
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();

@@ -14,10 +14,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { UserLogin } from '@/utils/user';
+
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
+import AlertComponent from '@/components/AlertComponent';
+import { useState } from 'react';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
@@ -25,16 +27,24 @@ export default function SignIn() {
 
   const router = useRouter()
   const { data: session, status } = useSession()
+  const [failedLogin, setFailedLogin] = useState(false)
+  const [msgFail, setMsgFail] = useState("")
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(process.env.URL_API)
+
     const resNextAuth = await signIn("credentials", {
       email: String(data.get("email")),
       password: String(data.get("password")),
       redirect: false
     })
+
+    if(resNextAuth?.status === 401){
+      setFailedLogin(true)
+      setMsgFail("Credenciales invalida, verifique su correo y contraseña")
+      return
+    }
 
     if (resNextAuth?.error) {
       console.log(resNextAuth?.error)
@@ -65,6 +75,7 @@ export default function SignIn() {
               alignItems: 'center',
             }}
           >
+            <AlertComponent isError={true} msg={msgFail} isOpen={failedLogin}/>
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
