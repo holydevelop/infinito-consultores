@@ -12,24 +12,33 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
+import Loading from '@/components/Loading';
 import { registerUser } from '@/utils/api';
-
 import { validData } from '@/utils/validations';
-import Loading from '../../components/Loading';
-import { Alert, Dialog } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AxiosResponse } from 'axios';
 import { useSession } from 'next-auth/react';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import { useRouter } from 'next/navigation';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-function Calendar({ setDate }: any) {
+interface FormErrors {
+  firstName?: string,
+  lastName?: string;
+  email?: string;
+  password?: string;
+  cellphone?: string;
+  dateofbirth?: string;
+}
 
+interface RegisterResponse {
+  statusCode?: number,
+  error?: any
+}
+
+function Calendar({ setDate, formErrors }: { setDate: any, formErrors: any }) {
   const handleDateChange = (date: any) => {
     setDate(date);
   };
@@ -40,25 +49,27 @@ function Calendar({ setDate }: any) {
         onChange={handleDateChange}
         label="Fecha de nacimiento"
         format="DD/MM/YY"
+        slotProps={{
+          textField: {
+            error: formErrors?.dateofbirth ? true : false,
+            helperText: formErrors?.dateofbirth
+          }
+        }}
       />
     </LocalizationProvider>
   );
 }
 
 export default function SignUp() {
-
   const router = useRouter()
   const { data: session, status } = useSession()
   //UseState para la fecha sirve para recibir la fecha
   const [date, setDate]: any = React.useState(null)
-  //Dialog sirve para mostrar el dialogo una vez que se clickea al registrar
-  const [dialogOpen, setIsDialogOpenLocally] = React.useState(false)
   //Informacion de error en los formularios para AlertRegister
-  const [formErrors, setFormErrors] = React.useState({});
+  const [formErrors, setFormErrors]: [FormErrors, any] = React.useState({});
+  //Error de email duplicado
   //Estado de carga
   const [isLoading, setIsLoading] = React.useState(false);
-  //Error duplicado
-  const [errorEmail, setErrorEmail] = React.useState(false)
 
   if (status === "loading") {
     return (<Loading isLoading={true} />)
@@ -72,6 +83,7 @@ export default function SignUp() {
     //Funcion al darle al boton de enviar
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      setFormErrors({})
       setIsLoading(true)
       const data = new FormData(event.currentTarget);
       const user = {
@@ -81,36 +93,42 @@ export default function SignUp() {
         rut: String(data.get('rut')),
         cellphone: String(data.get('cellphone')),
         profession: "INFORMATICA",
-        name: `${data.get('firstName')} ${data.get('lastName')}`
+        name: String(`${data.get('firstName')} ${data.get('lastName')}`),
+        firstName: String(data.get('firstName')),
+        lastName: String(data.get('lastName')),
+        rol: "USER"
       };
+
       // Validaciones utilizando la función validData
       const { errors } = validData(user);
+
       // Validacion de fecha
       if (!date) { //Funcion por error de pasar la fecha
         errors.dateofbirth = "Selecciona una fecha de nacimiento"
       }
       setFormErrors(errors)
-
       // Verificar si hay errores generales en el formulario
       const hasGeneralErrors = Object.values(errors).some((error) => error !== "");
       if (hasGeneralErrors) {
-        setIsDialogOpenLocally(true);
         setIsLoading(false);
         return;
       }
+      const { firstName, lastName, ...newUser } = user
 
-      const res: any = await registerUser(user);
-
-      if (res.statusCode === 400) {
-        setErrorEmail(true);
-        setIsLoading(false);
-        return;
+      const res: AxiosResponse<any, any> | RegisterResponse = await registerUser(newUser);
+      if ('statusCode' in res) {
+        if (res.statusCode === 400) {
+          const newFormerrors = { ...formErrors };
+          newFormerrors.email = "Correo electrónico ya en uso";
+          setFormErrors(newFormerrors);
+          setIsLoading(false);
+          return;
+        }
       } else {
-        setIsDialogOpenLocally(true);
         setIsLoading(false);
         return;
       }
-
+      
     };
 
     return (
@@ -141,16 +159,11 @@ export default function SignUp() {
                     fullWidth
                     id="firstName"
                     label="Nombre"
+                    error={formErrors.firstName ? true : false}
+                    helperText={formErrors.firstName}
                     autoFocus
                   />
                 </Grid>
-                <Dialog open={errorEmail}>
-                  <Alert severity="error" >
-                    <h1>Error al crear la cuenta</h1>
-                    <p>Verifique que el correo electronico no este duplicado</p>
-                    <Button onClick={() => { setErrorEmail(false) }}>Cerrar</Button>
-                  </Alert>
-                </Dialog>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     required
@@ -158,6 +171,8 @@ export default function SignUp() {
                     id="lastName"
                     label="Apellido"
                     name="lastName"
+                    error={formErrors.lastName ? true : false}
+                    helperText={formErrors.lastName}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -176,6 +191,8 @@ export default function SignUp() {
                     id="email"
                     label="Correo electronico"
                     name="email"
+                    error={formErrors.email ? true : false}
+                    helperText={formErrors.email}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -186,6 +203,8 @@ export default function SignUp() {
                     label="Contraseña"
                     type="password"
                     id="password"
+                    error={formErrors.password ? true : false}
+                    helperText={formErrors.password}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -196,10 +215,14 @@ export default function SignUp() {
                     label="Telefono / Celular (Añadir +56 9 o 2)"
                     type="string"
                     id="cellphone"
+                    error={formErrors.cellphone ? true : false}
+                    helperText={formErrors.cellphone}
                   />
                 </Grid>
                 <Grid item xs={12} container justifyContent={"center"}>
-                  <Calendar setDate={setDate} />
+                  <Calendar setDate={setDate} formErrors={formErrors}
+
+                  />
                 </Grid>
               </Grid>
               <Button

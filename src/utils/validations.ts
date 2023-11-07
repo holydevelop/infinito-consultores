@@ -63,15 +63,20 @@ function validName(name: String) {
 
 
 export function validData(data: {
-  name: string;
+  firstName: string;
+  lastName: string;
   email?: string;
   password?: string;
   cellphone?: string;
 }): { errors: { [key: string]: string } } {
   const errors: { [key: string]: string } = {};
   // Validación del primer nombre
-  if (!validName(data.name)) {
-    errors.name = 'El nombre no puede estar vacío';
+  if (!data.firstName) {
+    errors.firstName = 'El campo nombre no puede estar vacío';
+  }
+
+  if (!data.lastName) {
+    errors.lastName = 'El campo apellido no puede estar vacío';
   }
 
   // Validación de email
