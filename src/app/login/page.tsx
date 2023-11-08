@@ -40,7 +40,6 @@ export default function SignIn() {
 
     if(resNextAuth?.status === 401){
       setFailedLogin(true)
-      setMsgFail("Credenciales invalida, verifique su correo y contraseña")
       return
     }
 

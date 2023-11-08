@@ -2,7 +2,9 @@
 
 import React from 'react'
 import './../app/globals.css'
-import { getUserState } from '@/utils/getReduxState'
+
+import Image from 'next/image';
+import { useCustomReduxState } from '@/utils/getReduxState';
 
 function isObjectNotEmpty(obj: Record<string, string>) {
   for (let key in obj) {
@@ -14,13 +16,13 @@ function isObjectNotEmpty(obj: Record<string, string>) {
 }
 
 export const Navbar = () => {
-  const user = getUserState()
+  const user = useCustomReduxState()
   const session = isObjectNotEmpty(user)
   return (
     <nav className="bg-blue-500 border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center">
-          <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="Infinito Consultores Logo" />
+          <Image src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="Infinito Consultores Logo" width={50} height={50}/>
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Infinito Consultores</span>
         </a>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">

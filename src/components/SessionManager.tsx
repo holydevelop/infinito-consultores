@@ -13,7 +13,7 @@ export default function SessionManager({ children }: { children: React.ReactNode
   useEffect(() => {
     const sessionData = async () => {
       try {
-        const { iat, ...user } = await decryptJwt(session?.user?.access_token);
+        const { iat, ...user } = await decryptJwt(String(session?.user?.access_token));
         dispatch(setUser(user))
       } catch (error) {
         return null

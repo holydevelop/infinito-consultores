@@ -25,10 +25,9 @@ import "./styles.css";
 
 import { ExistProfile, GetUserApi, PutUserApi } from '@/utils/api';
 import Loading from '@/components/Loading';
-import { UserPut } from '@/utils/user';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '@/redux/hooks';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -56,7 +55,7 @@ export default function Profile({ params }: { params: { id: string } }) {
   const [isLoading, setIsLoading] = useState(true)
   //Partes de la edicion del perfil
   const [isEditing, setIsEditing] = useState(false);
-  const [editInfo, setEditInfo] = useState({ profession: '', cellphone: '' });
+  const [editInfo, setEditInfo] = useState({ profession: info?.prof, cellphone: info?.cel });
 
   const router = useRouter()
 
@@ -67,7 +66,7 @@ export default function Profile({ params }: { params: { id: string } }) {
     });
   };
 
-  const loadInformation = async (userId: string) => {
+  async function loadInformation (userId: string){
     // Dentro de esta función, puedes hacer la solicitud con el userId que se pasa
     try {
       const isProfile = await ExistProfile(params.id)
@@ -105,7 +104,7 @@ export default function Profile({ params }: { params: { id: string } }) {
     if (user.id) {
       loadInformation(params.id);
     }
-  }, [user.id]); // Asegúrate de usar user.id en la dependencia del efecto
+  }, [user.id,params.id]); // Asegúrate de usar user.id en la dependencia del efecto
 
   if (isLoading) {
     return (<Loading isLoading={true} />)
@@ -163,6 +162,7 @@ export default function Profile({ params }: { params: { id: string } }) {
                         sx={{ width: "300px", height: "70px" }}
                         name='profession'
                         value={editInfo.profession}
+                        label={info?.prof}
                         onChange={(event) => handleInfoChange(event, 'profession')}
                       />
                   }
@@ -190,7 +190,7 @@ export default function Profile({ params }: { params: { id: string } }) {
                         sx={{ width: "300px", height: "12vh" }}
                         name="cellphone"
                         value={editInfo.cellphone}
-                        label={editInfo.cellphone}
+                        label={info?.cel}
                         onChange={(event) => handleInfoChange(event, 'cellphone')}
                       />
                   }

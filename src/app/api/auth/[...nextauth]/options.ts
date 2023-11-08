@@ -32,7 +32,7 @@ export const options: NextAuthOptions = {
     async jwt({ token, user }) {
       return { ...token, ...user };
     },
-    async session({ session, token }) {
+    async session({ session, token }){
       session.user = token as any;
       return session;
     },
