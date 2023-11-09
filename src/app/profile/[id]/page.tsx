@@ -43,7 +43,7 @@ interface Info {
 
 export default function Profile({ params }: { params: { id: string } }) {
   //Carga la actualizacion
-  const {data:session,update} = useSession()
+  const { data: session, update } = useSession()
   //Carga del user state
   const user = useAppSelector(state => state.user)
 
@@ -66,7 +66,7 @@ export default function Profile({ params }: { params: { id: string } }) {
     });
   };
 
-  async function loadInformation (userId: string){
+  async function loadInformation(userId: string) {
     // Dentro de esta función, puedes hacer la solicitud con el userId que se pasa
     try {
       const isProfile = await ExistProfile(params.id)
@@ -84,27 +84,22 @@ export default function Profile({ params }: { params: { id: string } }) {
   };
 
   const onSubmitChanges = async () => {
-    try {    
+    try {
       const res = await PutUserApi(user.id, { cellphone: editInfo.cellphone, profession: editInfo.profession })
-      update({user: {access_token: res.data}})
+      update({ user: { access_token: res.data } })    
       setIsEditing(false)
-    }catch(err){
+      loadInformation(user.id);
+    } catch (err) {
       console.log(err)
       setIsEditing(false)
     }
   }
 
-  const editProfileButton = () => {
-    setIsEditing(true)
-  }
-
   React.useEffect(() => {
-    // Una vez que tengas el valor de user.id, puedes llamar a loadInformation
-    //Es decir que si existe el user.id cargara la informacion
     if (user.id) {
       loadInformation(params.id);
     }
-  }, [user.id,params.id]); // Asegúrate de usar user.id en la dependencia del efecto
+  }, [user.id, params.id]); // Asegúrate de usar user.id en la dependencia del efecto
 
   if (isLoading) {
     return (<Loading isLoading={true} />)
@@ -229,7 +224,7 @@ export default function Profile({ params }: { params: { id: string } }) {
               {
                 (user.id === info?.id) && !isEditing ?
                   <Grid item>
-                    <Button variant="contained" color="primary" sx={{ backgroundColor: '#5B2C6F' }} onClick={editProfileButton}>
+                    <Button variant="contained" color="primary" sx={{ backgroundColor: '#5B2C6F' }} onClick={() => {setIsEditing(true)}}>
                       <EditIcon />
                       Editar Perfil
                     </Button>
@@ -261,7 +256,6 @@ export default function Profile({ params }: { params: { id: string } }) {
                   :
                   null
               }
-
             </Grid>
 
           </Container>

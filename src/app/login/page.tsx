@@ -27,9 +27,12 @@ export default function SignIn() {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [failedLogin, setFailedLogin] = useState(false)
+  const [msgError, setMsgError] = useState("")
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setFailedLogin(false)
+    setMsgError("")
     const data = new FormData(event.currentTarget);
 
     const resNextAuth = await signIn("credentials", {
@@ -40,6 +43,7 @@ export default function SignIn() {
 
     if(resNextAuth?.status === 401){
       setFailedLogin(true)
+      setMsgError("Credenciales incorrectas. Verifica tu correo y contraseña")
       return
     }
 
@@ -88,6 +92,8 @@ export default function SignIn() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                error={failedLogin? true : false}
+                helperText={msgError}
               />
               <TextField
                 margin="normal"
@@ -98,6 +104,7 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={failedLogin? true : false}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
