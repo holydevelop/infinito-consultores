@@ -57,3 +57,34 @@ export async function PutUserApi(id: string,user: UserPut) {
   }
 }
 
+//OBTIENE LOS DOCUMENTOS MEDIANTE UN GET A /doc/user/id
+export async function GetDocument(id: string) {
+  try {
+    const res = await Axios.get(`${process.env.URL_API}/doc/user/${id}`)
+    return res
+  } catch (error: any) {
+    return error
+  }
+}
+
+
+//SE REALIZA UN POST A LA API PARA SUBIR EL DOCUMENTO
+export async function PostDocument(id: string, file: File) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file); // 'file' es el nombre del campo en el formulario, puedes ajustarlo según sea necesario
+    formData.append('userId', id)
+    console.log("el file es: ", file)
+    console.log("el id es: ", id)
+    const res = await Axios.post(`${process.env.URL_API}/doc`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log("Respuesta de la API: ", res)
+    return res;
+  } catch (error) {
+    throw error;
+  }
+}
+

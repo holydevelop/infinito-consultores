@@ -95,8 +95,7 @@ export default function SignUp() {
         profession: "INFORMATICA",
         name: String(`${data.get('firstName')} ${data.get('lastName')}`),
         firstName: String(data.get('firstName')),
-        lastName: String(data.get('lastName')),
-        rol: "USER"
+        lastName: String(data.get('lastName'))
       };
 
       // Validaciones utilizando la función validData
@@ -126,6 +125,8 @@ export default function SignUp() {
         }
       } else {
         setIsLoading(false);
+        alert("Cuenta creada con exito")
+        router.push("/")
         return;
       }
       

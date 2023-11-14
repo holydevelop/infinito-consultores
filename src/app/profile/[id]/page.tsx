@@ -19,15 +19,15 @@ import {
 } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import EditIcon from '@mui/icons-material/Edit';
-import FeedIcon from '@mui/icons-material/Feed';
 
 import "./styles.css";
 
-import { ExistProfile, GetUserApi, PutUserApi } from '@/utils/api';
+import { ExistProfile, GetDocument, GetUserApi, PutUserApi } from '@/utils/api';
 import Loading from '@/components/Loading';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/redux/hooks';
+import FileUploadComponent from '@/components/FileUpload';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -35,10 +35,11 @@ const defaultTheme = createTheme();
 interface Info {
   rut?: string;
   correo?: string;
-  nacimiento?: string,
-  prof?: string,
-  cel?: string,
-  id: string
+  nacimiento?: string;
+  prof?: string;
+  cel?: string;
+  id: string;
+  nombre?: string;
 }
 
 export default function Profile({ params }: { params: { id: string } }) {
@@ -46,9 +47,10 @@ export default function Profile({ params }: { params: { id: string } }) {
   const { data: session, update } = useSession()
   //Carga del user state
   const user = useAppSelector(state => state.user)
-
   //Carga de informacion
   const [info, setInfo]: [Info | null, any] = useState<Info | null>(null);
+  // Si es true el error entonces significa que dio 404 y no se encuentra
+  const [pdfExist, setPdfExist] = useState(true);
   //Verificacion si el perfil es valido
   const [validprofile, setValidProfile] = useState(false)
   //Partes de la carga
@@ -56,6 +58,8 @@ export default function Profile({ params }: { params: { id: string } }) {
   //Partes de la edicion del perfil
   const [isEditing, setIsEditing] = useState(false);
   const [editInfo, setEditInfo] = useState({ profession: info?.prof, cellphone: info?.cel });
+  //Actualizacion IFrame
+  const [iframeKey, setIframeKey] = useState(0);
 
   const router = useRouter()
 
@@ -73,6 +77,10 @@ export default function Profile({ params }: { params: { id: string } }) {
       setValidProfile(isProfile)
       if (isProfile) {
         const user = await GetUserApi(userId);
+        const resPdf = await GetDocument(userId)
+        if (resPdf?.response?.status === 404) {
+          setPdfExist(false)
+        }
         setInfo(user.data);
         setIsLoading(false)
       }
@@ -86,7 +94,7 @@ export default function Profile({ params }: { params: { id: string } }) {
   const onSubmitChanges = async () => {
     try {
       const res = await PutUserApi(user.id, { cellphone: editInfo.cellphone, profession: editInfo.profession })
-      update({ user: { access_token: res.data } })    
+      update({ user: { access_token: res.data } })
       setIsEditing(false)
       loadInformation(user.id);
     } catch (err) {
@@ -100,6 +108,11 @@ export default function Profile({ params }: { params: { id: string } }) {
       loadInformation(params.id);
     }
   }, [user.id, params.id]); // Asegúrate de usar user.id en la dependencia del efecto
+
+  // En la función de actualización que se pasa a FileUploadComponent
+  const updateIframe = () => {
+    setIframeKey(iframeKey + 1);
+  };
 
   if (isLoading) {
     return (<Loading isLoading={true} />)
@@ -118,81 +131,111 @@ export default function Profile({ params }: { params: { id: string } }) {
                       MB
                     </Avatar>
                     <Typography variant="h4" style={{ color: '#fff', fontFamily: 'Quicksand', fontSize: '48px' }} gutterBottom>
-                      {user.name}
+                      {info?.nombre}
                     </Typography>
                   </Box>
                 </Grid>
               </Grid>
             </Paper>
-            <Card style={{ backgroundColor: '#F5FFFA' }}>
+            <Card style={{ backgroundColor: '#F5FFFA' }} >
               <CardHeader title="Información profesional" />
               <CardContent>
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Rut</Typography>
-                  <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.rut}</Typography>
-                  <br />
-                </Grid>
+                <Container className='main-grid' sx={{ display: "flex", justifyContent: "space-between", width: "100%", height: "100%", alignContent: "center" }}>
+                  <Grid className='left-grid'>
+                    <Grid item xs={12} sm={6} sx={{ flex: 1 }}>
+                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Rut</Typography>
+                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.rut}</Typography>
+                      <br />
+                    </Grid>
 
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Correo</Typography>
-                  <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.correo}</Typography>
-                  <br />
-                </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Correo</Typography>
+                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.correo}</Typography>
+                      <br />
+                    </Grid>
 
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Fecha de nacimiento</Typography>
-                  <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.nacimiento}</Typography>
-                  <br />
-                </Grid>
-
-
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Profesión</Typography>
-                  {
-                    !isEditing ?
-                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.prof}</Typography>
-                      :
-                      <TextField
-                        defaultValue={info?.prof}
-                        sx={{ width: "300px", height: "70px" }}
-                        name='profession'
-                        value={editInfo.profession}
-                        label={info?.prof}
-                        onChange={(event) => handleInfoChange(event, 'profession')}
-                      />
-                  }
-
-                  <br />
-                </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Fecha de nacimiento</Typography>
+                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.nacimiento}</Typography>
+                      <br />
+                    </Grid>
 
 
-                {/*
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Profesión</Typography>
+                      {
+                        !isEditing ?
+                          <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.prof}</Typography>
+                          :
+                          <TextField
+                            defaultValue={info?.prof}
+                            sx={{ width: "300px", height: "70px" }}
+                            name='profession'
+                            value={editInfo.profession}
+                            label={info?.prof}
+                            onChange={(event) => handleInfoChange(event, 'profession')}
+                          />
+                      }
+
+                      <br />
+                    </Grid>
+
+
+                    {/*
                   <Grid item xs={12} sm={6}>
                     <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Descripción</Typography>
                     <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{user.description}</Typography>
                     <br />
                   </Grid>*/
-                }
+                    }
 
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Celular</Typography>
-                  {
-                    !isEditing ?
-                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.cel}</Typography>
-                      :
-                      <TextField
-                        defaultValue={info?.cel}
-                        sx={{ width: "300px", height: "12vh" }}
-                        name="cellphone"
-                        value={editInfo.cellphone}
-                        label={info?.cel}
-                        onChange={(event) => handleInfoChange(event, 'cellphone')}
-                      />
-                  }
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>Celular</Typography>
+                      {
+                        !isEditing ?
+                          <Typography variant="h6" style={{ fontFamily: 'Quicksand', fontSize: '18px' }}>{info?.cel}</Typography>
+                          :
+                          <TextField
+                            defaultValue={info?.cel}
+                            sx={{ width: "300px", height: "12vh" }}
+                            name="cellphone"
+                            value={editInfo.cellphone}
+                            label={info?.cel}
+                            onChange={(event) => handleInfoChange(event, 'cellphone')}
+                          />
+                      }
 
-                  <br />
-                </Grid>
+                      <br />
+                    </Grid>
+                  </Grid>
 
+                  <Grid className='right-grid' sx={{ justifyContent: "center", flex: 2, marginLeft: "200px" }}>
+                    {
+                      pdfExist ? (
+                        <>
+                          <iframe src={`${process.env.URL_API}/doc/user/${params.id}`}
+                          width={"90%"} height={"400px"}
+                          id='Curriculum' key={iframeKey}/>
+                          {!isEditing ? null : (
+                            <div style={{ textAlign: 'center' }}>
+                              <FileUploadComponent isEditing={true}
+                                message={"Deseas modificar el curriculum?, selecciona el archivo"}
+                                updateIframe={updateIframe}
+                              />
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div style={{ textAlign: 'center' }}>
+                          <FileUploadComponent isEditing={isEditing}
+                            message={"No tienes curriculum en formato PDF adjunto, haz clic en el botón para subir alguno"}
+                          />
+                        </div>
+                      )
+                    }
+
+                  </Grid>
+                </Container>
               </CardContent>
             </Card>
 
@@ -210,21 +253,9 @@ export default function Profile({ params }: { params: { id: string } }) {
               }
 
               {
-                isEditing ?
-                  null
-                  :
-                  <Grid item>
-                    <Button variant="contained" color="primary" href="/" sx={{ backgroundColor: '#CB752C' }}>
-                      <FeedIcon />
-                      Ver Curriculum
-                    </Button>
-                  </Grid>
-              }
-
-              {
                 (user.id === info?.id) && !isEditing ?
                   <Grid item>
-                    <Button variant="contained" color="primary" sx={{ backgroundColor: '#5B2C6F' }} onClick={() => {setIsEditing(true)}}>
+                    <Button variant="contained" color="primary" sx={{ backgroundColor: '#5B2C6F' }} onClick={() => { setIsEditing(true) }}>
                       <EditIcon />
                       Editar Perfil
                     </Button>

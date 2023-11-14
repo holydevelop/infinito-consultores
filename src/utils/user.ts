@@ -6,7 +6,6 @@ export interface User{
   profession: String,
   rut: String,
   cellphone: String,
-  rol: String
 }
 
 export interface UserLogin{
