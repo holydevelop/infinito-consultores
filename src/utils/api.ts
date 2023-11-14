@@ -74,14 +74,11 @@ export async function PostDocument(id: string, file: File) {
     const formData = new FormData();
     formData.append('file', file); // 'file' es el nombre del campo en el formulario, puedes ajustarlo según sea necesario
     formData.append('userId', id)
-    console.log("el file es: ", file)
-    console.log("el id es: ", id)
     const res = await Axios.post(`${process.env.URL_API}/doc`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log("Respuesta de la API: ", res)
     return res;
   } catch (error) {
     throw error;

@@ -48,7 +48,6 @@ export default function SignIn() {
     }
 
     if (resNextAuth?.error) {
-      console.log(resNextAuth?.error)
       return
     }
 

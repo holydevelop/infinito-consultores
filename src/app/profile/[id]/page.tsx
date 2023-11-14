@@ -98,7 +98,6 @@ export default function Profile({ params }: { params: { id: string } }) {
       setIsEditing(false)
       loadInformation(user.id);
     } catch (err) {
-      console.log(err)
       setIsEditing(false)
     }
   }
