@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { UserLogin, User, UserPut } from "./user";
+import { Job } from "./job";
 
 //Register user with POST in API /users
 export async function registerUser(data: User) {
@@ -14,6 +15,8 @@ export async function registerUser(data: User) {
   }
 
 }
+
+
 
 //Login user with POST in API /auth/login
 export async function loginUser(data: UserLogin) {
@@ -38,6 +41,7 @@ export async function ExistProfile(id: string) {
     throw error
   }
 }
+
 //OBTIENE EL USUARIO DE LA API SOLO 1 /users/id
 export async function GetUserApi(id: string) {
   try {
@@ -57,3 +61,26 @@ export async function PutUserApi(id: string,user: UserPut) {
   }
 }
 
+//Register job with POST in API /ofertas
+export async function registerJob(data: Job) {
+  try {
+    const res = await Axios.post(`${process.env.URL_API}/ofertas`, data)
+    return res
+  } catch (error: any) {
+    return {
+      statusCode: error.response.data.statusCode,
+      error: error.response.data.error
+    }
+  }
+  
+}
+
+//OBTIENE EL TRABAJO DE LA API SOLO 1 /ofertas/id
+export async function GetJobApi() {
+  try {
+    const res = await Axios.get(`${process.env.URL_API}/ofertas`)
+    return res
+  } catch (error: any) {
+    throw error
+  }
+}
