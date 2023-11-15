@@ -93,10 +93,10 @@ export default function Profile({ params }: { params: { id: string } }) {
 
   const onSubmitChanges = async () => {
     try {
-      const res = await PutUserApi(user.id, { cellphone: editInfo.cellphone, profession: editInfo.profession })
+      const res = await PutUserApi(user?.id, { cellphone: editInfo.cellphone, profession: editInfo.profession })
       update({ user: { access_token: res.data } })
       setIsEditing(false)
-      loadInformation(user.id);
+      loadInformation(user?.id);
     } catch (err) {
       setIsEditing(false)
     }
