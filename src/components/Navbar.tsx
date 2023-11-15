@@ -36,14 +36,14 @@ export const Navbar = () => {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center">
           <Image src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="Infinito Consultores Logo" width={50} height={50} />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Infinito Consultores</span>
+          <span className="self-center text-2xl font-semibold whitespace-nowrap">Infinito Consultores</span>
         </a>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-blue-500 dark:bg-gray-800">
+          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-blue-500">
             {
               !session ?
                 <li>
-                  <a href="/login" className="block py-2 pl-3 pr-4 text-black bg-blue-500 rounded md:text-black md:p-0 dark:text-white md:dark:text-black" aria-current="page">Iniciar Sesion</a>
+                  <a href="/login" className="block py-2 pl-3 pr-4 text-black bg-blue-500 rounded md:text-black md:p-0" aria-current="page">Iniciar Sesion</a>
                 </li>
                 :
                 null
@@ -51,7 +51,7 @@ export const Navbar = () => {
             {
               !session ?
                 <li>
-                  <a href="/register" className="block py-2 pl-3 pr-4 text-black bg-blue-500 rounded md:text-black md:p-0 dark:text-white md:dark:text-black" aria-current="page">Registro</a>
+                  <a href="/register" className="block py-2 pl-3 pr-4 text-black bg-blue-500 rounded md:text-black md:p-0 md:dark:text-black" aria-current="page">Registro</a>
                 </li>
                 :
                 null
