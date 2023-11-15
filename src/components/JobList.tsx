@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, Button } from '@mui/material';
+import { Card, CardContent, Typography, Button, Grid } from '@mui/material';
 
 // Definir un tipo para los trabajos
 
@@ -8,15 +8,16 @@ interface Job {
   posicion?: string,
   empresa?: string,
   descripcion?: string,
-  tags?: string,
+  tags?: string[],
+  fecha_publicacion?: string
 }
 
 type JobListProps = {
-    jobs: Job[]; // Especifica el tipo de 'jobs'
+  jobs: Job[]; // Especifica el tipo de 'jobs'
 };
 
 
-const JobList = ({ jobs}:JobListProps) => {
+const JobList = ({ jobs }: JobListProps) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const handleDetailsClick = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -33,47 +34,31 @@ const JobList = ({ jobs}:JobListProps) => {
             <CardContent>
               <Typography variant="h5">{job.posicion}</Typography>
               <Typography variant="subtitle1">{job.empresa}</Typography>
-              <Typography variant="body1">{job.descripcion}</Typography>
               {expandedIndex === index ? (
-                <Typography variant="body1">{job.tags}</Typography>
+                <Typography variant="body1">{job.descripcion}</Typography>
               ) : null}
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleDetailsClick(index)}
-              >
-                Me interesa
-              </Button>
+              <Typography variant="body1">{job.fecha_publicacion}</Typography>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleDetailsClick(index)}
+                >
+                  Ver mas
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                >
+                  Me interesa
+                </Button>
+              </div>
             </CardContent>
           </Card>
         ))}
     </div>
   );
 
-  /*
-  return (
-    <div>
-      {jobs.map((job, index) => (
-        <Card key={index} style={{ marginBottom: '10px' }}>
-          <CardContent>
-            <Typography variant="h5">{job.posicion}</Typography>
-            <Typography variant="subtitle1">{job.empresa}</Typography>
-            <Typography variant="body1">{job.descripcion}</Typography>
-            {expandedIndex === index ? (
-              <Typography variant="body1">{job.tags}</Typography>
-            ) : null}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleDetailsClick(index)}
-            >
-              Ver Más
-            </Button>
-          </CardContent>
-        </Card>
-            ))}
-    </div>
-  );*/
 };
 
 export default JobList;

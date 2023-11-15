@@ -16,8 +16,6 @@ export async function registerUser(data: User) {
 
 }
 
-
-
 //Login user with POST in API /auth/login
 export async function loginUser(data: UserLogin) {
   try {

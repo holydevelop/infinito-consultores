@@ -10,11 +10,13 @@ const JobSearch = ({ onSearch }: JobSearchProps) => {
 
   const handleSearch = () => {
     onSearch(searchTerm);
+    //setSearchTerm(''); // Limpiar la búsqueda después de realizarla
   };
 
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       onSearch(searchTerm);
+      //setSearchTerm(''); 
     }
   };
 

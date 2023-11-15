@@ -55,6 +55,19 @@ export default function Proposal() {
   //Estado de carga
   const [isLoading, setIsLoading] = React.useState(false);
 
+  //datos iniciales
+  const initialState = {
+    posicion: '',
+    empresa: '',
+    descripcion: '',
+    tags: ''
+  };
+
+  //informacion de los trabajos
+  const [job, setJob] = React.useState(initialState);
+
+
+
   if (status === "loading") {
     return (<Loading isLoading={true} />)
   }
@@ -104,6 +117,8 @@ export default function Proposal() {
 
         setIsLoading(false);
         setOpen(true);
+        // Reiniciar el estado del formulario después de enviar la propuesta
+        setJob(initialState);
         return;
       }
 
@@ -141,6 +156,8 @@ export default function Proposal() {
                       error={formErrors.posicion ? true : false}
                       helperText={formErrors.posicion}
                       autoFocus
+                      value={job.posicion}  // Asegúrate de asignar el valor del estado al campo
+                      onChange={(e) => setJob({ ...job, posicion: e.target.value })}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -152,6 +169,8 @@ export default function Proposal() {
                       name="company"
                       error={formErrors.empresa ? true : false}
                       helperText={formErrors.empresa}
+                      value={job.empresa}  // Asegúrate de asignar el valor del estado al campo
+                      onChange={(e) => setJob({ ...job, empresa: e.target.value })}
                     />
                   </Grid>
                   <Grid item xs={12} height={"90%"}>
@@ -164,6 +183,8 @@ export default function Proposal() {
                       error={formErrors.descripcion ? true : false}
                       helperText={formErrors.descripcion}
                       multiline
+                      value={job.descripcion}  // Asegúrate de asignar el valor del estado al campo
+                      onChange={(e) => setJob({ ...job, descripcion: e.target.value })}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -175,6 +196,8 @@ export default function Proposal() {
                       name="tag"
                       error={formErrors.tags ? true : false}
                       helperText={formErrors.tags}
+                      value={job.tags}  // Asegúrate de asignar el valor del estado al campo
+                      onChange={(e) => setJob({ ...job, tags: e.target.value })}
                     />
                   </Grid>
                 </Grid>
