@@ -113,6 +113,22 @@ export default function Profile({ params }: { params: { id: string } }) {
     setIframeKey(iframeKey + 1);
   };
 
+  function obtenerIniciales(name: string): string {
+    // Dividir el nombre completo en nombre y apellido
+    const partesNombre = name.split(" ");
+    const primerNombre: string = partesNombre[0] || ''; // Tomar el primer elemento como nombre
+    const primerApellido: string = partesNombre[1] || ''; // Tomar el segundo elemento como apellido
+
+    // Obtener la primera letra del nombre y del apellido
+    const inicialNombre: string = primerNombre ? primerNombre[0] : '';
+    const inicialApellido: string = primerApellido ? primerApellido[0] : '';
+
+    // Concatenar las iniciales en una variable
+    const iniciales: string = inicialNombre + inicialApellido;
+
+    return iniciales;
+  }
+
   if (isLoading) {
     return (<Loading isLoading={true} />)
   }
@@ -127,7 +143,7 @@ export default function Profile({ params }: { params: { id: string } }) {
                 <Grid item xs={12} sm={6}>
                   <Box display="flex" alignItems="center">
                     <Avatar alt="Foto de perfil" style={{ width: '120px', height: '120px', marginRight: '16px', border: '2px solid #2196F3', backgroundColor: 'green' }}>
-                      MB
+                      {obtenerIniciales(String(info?.nombre))}
                     </Avatar>
                     <Typography variant="h4" style={{ color: '#fff', fontFamily: 'Quicksand', fontSize: '48px' }} gutterBottom>
                       {info?.nombre}
@@ -213,8 +229,8 @@ export default function Profile({ params }: { params: { id: string } }) {
                       pdfExist ? (
                         <>
                           <iframe src={`${process.env.URL_API}/doc/user/${params.id}`}
-                          width={"90%"} height={"400px"}
-                          id='Curriculum' key={iframeKey}/>
+                            width={"90%"} height={"400px"}
+                            id='Curriculum' key={iframeKey} />
                           {!isEditing ? null : (
                             <div style={{ textAlign: 'center' }}>
                               <FileUploadComponent isEditing={true}
