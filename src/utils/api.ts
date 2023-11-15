@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { UserLogin, User, UserPut } from "./user";
+import { Job } from "./job";
 
 //Register user with POST in API /users
 export async function registerUser(data: User) {
@@ -38,6 +39,7 @@ export async function ExistProfile(id: string) {
     throw error
   }
 }
+
 //OBTIENE EL USUARIO DE LA API SOLO 1 /users/id
 export async function GetUserApi(id: string) {
   try {
@@ -57,31 +59,26 @@ export async function PutUserApi(id: string,user: UserPut) {
   }
 }
 
-//OBTIENE LOS DOCUMENTOS MEDIANTE UN GET A /doc/user/id
-export async function GetDocument(id: string) {
+//Register job with POST in API /ofertas
+export async function registerJob(data: Job) {
   try {
-    const res = await Axios.get(`${process.env.URL_API}/doc/user/${id}`)
+    const res = await Axios.post(`${process.env.URL_API}/ofertas`, data)
     return res
   } catch (error: any) {
-    return error
+    return {
+      statusCode: error.response.data.statusCode,
+      error: error.response.data.error
+    }
   }
+  
 }
 
-
-//SE REALIZA UN POST A LA API PARA SUBIR EL DOCUMENTO
-export async function PostDocument(id: string, file: File) {
+//OBTIENE EL TRABAJO DE LA API SOLO 1 /ofertas/id
+export async function GetJobApi() {
   try {
-    const formData = new FormData();
-    formData.append('file', file); // 'file' es el nombre del campo en el formulario, puedes ajustarlo según sea necesario
-    formData.append('userId', id)
-    const res = await Axios.post(`${process.env.URL_API}/doc`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return res;
-  } catch (error) {
-    throw error;
+    const res = await Axios.get(`${process.env.URL_API}/ofertas`)
+    return res
+  } catch (error: any) {
+    throw error
   }
 }
-

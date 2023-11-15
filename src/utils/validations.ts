@@ -1,3 +1,5 @@
+import { Job } from "./job";
+
 const isEmail = require('validator/lib/isEmail')
 
 function validEmail(email: String) {
@@ -68,6 +70,7 @@ export function validData(data: {
   email?: string;
   password?: string;
   cellphone?: string;
+  
 }): { errors: { [key: string]: string } } {
   const errors: { [key: string]: string } = {};
   // Validación del primer nombre
@@ -92,6 +95,59 @@ export function validData(data: {
   // Validación de teléfono
   if (!data.cellphone || validPhone(String(data.cellphone))) {
     errors.cellphone = 'Teléfono no válido';
+  }
+
+  return {errors};
+}
+
+
+function validTag(tags: String) {
+  //Solo estas son las etiquetas permitidas
+  const palabrasPermitidas = ['Virtual', 'Online', 'Hibrido', 'Practica', 'Fulltime', 'Partime', 'Santiago', 'Región'];
+  //mapea las palabras y las hace minisculas para facilitar la comparacion
+  const palabrasMinusculas = palabrasPermitidas.map(palabra => palabra.toLowerCase());
+  //separa las tags del usuario y las mapea aparte para la comparasión
+  const palabrasUsuario = tags.split(',').map(palabra => palabra.trim().toLowerCase());
+  //verfica si existe alguna palabra no permitida
+  const palabrasNoPermitidas = palabrasUsuario.filter(palabra => !palabrasMinusculas.includes(palabra));
+  
+  if (palabrasNoPermitidas.length === 0) {
+    //todas las palabras son validas
+    return false;
+  } else {
+    //hay alguna palabra que es no valida
+    return true;
+  }
+}
+
+export function validDataJob(data2: {
+  posicion?: String,
+  empresa?: String,
+  descripcion?: String,
+  tags?: String,
+  reclutadorId?: String
+  
+}): { errors: { [key: string]: string } } {
+  const errors: { [key: string]: string } = {};
+
+  //Validación del titulo del trabajo
+  if (!data2.posicion) {
+    errors.posicion = 'El campo Titulo no puede estar vacío';
+  }
+
+  //Validación de la compañia del trabajo
+  if (!data2.empresa) {
+    errors.empresa = 'El campo Compañia no puede estar vacío';
+  }
+
+  //Validación de la descripcion del trabajo
+  if (!data2.descripcion) {
+    errors.descripcion = 'El campo Descripción no puede estar vacío';
+  }
+
+  //Validación de los tags del trabajo
+  if (!data2.tags || validTag(String(data2.tags))) {
+    errors.tags = 'Las tags no son validas. Solo se admiten Virtual, Online, Hibrido, Practica, Fulltime, Partime, Santiago o Región';
   }
 
   return {errors};
