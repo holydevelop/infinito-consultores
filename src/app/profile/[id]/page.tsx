@@ -78,9 +78,6 @@ export default function Profile({ params }: { params: { id: string } }) {
       if (isProfile) {
         const user = await GetUserApi(userId);
         const resPdf = await GetDocument(userId)
-        if (resPdf?.response?.status === 404) {
-          setPdfExist(false)
-        }
         setInfo(user.data);
         setIsLoading(false)
       }

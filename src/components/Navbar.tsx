@@ -54,7 +54,7 @@ export default function NavBar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={() => { router.push(`/profile/user/${user?.id}`) }}>Perfil</MenuItem>
+                <MenuItem onClick={() => { router.push(`/profile/${user?.id}`) }}>Perfil</MenuItem>
                 <MenuItem onClick={handleClose}>Postulaciones</MenuItem>
                 <MenuItem onClick={() => signOut()}>Cerrar Sesión</MenuItem>
               </Menu>
