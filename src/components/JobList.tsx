@@ -5,6 +5,7 @@ import { Card, CardContent, Typography, Button, Grid } from '@mui/material';
 // Definir un tipo para los trabajos
 
 interface Job {
+  id: string,
   posicion?: string,
   empresa?: string,
   descripcion?: string,
@@ -14,17 +15,26 @@ interface Job {
 
 type JobListProps = {
   jobs: Job[]; // Especifica el tipo de 'jobs'
+  handleInterestClick: (jobId: string) => void; // Nueva prop para la función de interés
+  interestState: { [jobId: string]: boolean };
 };
 
 
-const JobList = ({ jobs }: JobListProps) => {
+const JobList = ({ jobs, handleInterestClick, interestState }: JobListProps) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
   const handleDetailsClick = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
-  };
+ };
 
 
-
+ const handleInterest = async (jobId: string) => {
+  try {
+    await handleInterestClick(jobId);
+  } catch (error) {
+    console.error('Error al gestionar interés:', error);
+  }
+};
 
   return (
     <div>
@@ -46,12 +56,13 @@ const JobList = ({ jobs }: JobListProps) => {
                 >
                   Ver mas
                 </Button>
-                <Button
+                {/*<Button
                   variant="contained"
                   color="primary"
+                  onClick={() => handleInterestClick(job.id)} // Invoca la función de interés con el jobId
                 >
-                  Me interesa
-                </Button>
+                   {interestState[job.id] ? 'Ya no me interesa' : 'Me interesa'}
+                </Button>*/}
               </div>
             </CardContent>
           </Card>

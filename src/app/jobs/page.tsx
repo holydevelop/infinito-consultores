@@ -12,13 +12,14 @@ import { useAppSelector } from '@/redux/hooks';
 import { JobWall } from '@/utils/job';
 import Axios from "axios";
 import { useRouter } from 'next/navigation';
-import { GetJobApi } from '@/utils/api';
+import { GetJobApi, registerInteres } from '@/utils/api';
 import Loading from '@/components/Loading';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 interface Job {
+  id: string,
   posicion?: string;
   empresa?: string;
   descripcion?: string,
@@ -28,8 +29,6 @@ interface Job {
 
 
 export default function JobsPage({ params }: { params: { id: string } }) {
-  //Carga la actualizacion
-  //const { data: session, update } = useSession()
 
   //Carga del user state
   const user = useAppSelector(state => state.user)
@@ -37,12 +36,11 @@ export default function JobsPage({ params }: { params: { id: string } }) {
   //Carga de informacion
   const [jobs, setJobs]: [Job[] | null, any] = useState<Job[] | null>(null);
 
+  //Estado para controlar me boton me interesa
+  const [interestState, setInterestState] = useState<{ [jobId: string]: boolean }>({});
+
   //const para la division de las paginas
   const [tab, setTab] = useState<number>(0);
-  const handleChangeTab = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setTab(newValue);
-  };
-
 
   //relacionado a la busqueda de terminos
   const [searchTerm, setSearchTerm] = useState('');
@@ -87,15 +85,10 @@ export default function JobsPage({ params }: { params: { id: string } }) {
     }
   };
 
-  /*
-  const handleTagClick = (tag: string | null) => {
-    setSelectedTag(tag);
-  };*/
-
   //funcion para buscar en base al buscador
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-  
+
     if (term.trim() !== '') {
       // Filtra los trabajos según el término de búsqueda
       const filtered = jobs?.filter(job => {
@@ -115,6 +108,20 @@ export default function JobsPage({ params }: { params: { id: string } }) {
     }
   };
 
+  //configuracion para el me interesa
+  const handleInterestClick = async (jobId: string) => {
+    try {
+      // Realiza la función mejorada que maneja vinculación y desvinculación
+      await registerInteres(user.id, jobId);
+
+      // Actualiza el estado de interés después de la acción
+      setInterestState(prevState => ({ ...prevState, [jobId]: !prevState[jobId] }));
+    } catch (error) {
+      console.error('Error al gestionar interés:', error);
+    }
+  };
+
+
   //funcion async que procesa la carga de los trabajos
   async function loadJobs() {
     try {
@@ -132,41 +139,26 @@ export default function JobsPage({ params }: { params: { id: string } }) {
     setIsLoading(false);
   }
 
-  /*
-        if (searchTerm.trim() !== '') {
-          const filtered = allJobs.filter(job => {
-            return (
-              job.posicion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              job.empresa?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              job.descripcion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              (job.tags && job.tags.toLowerCase().includes(searchTerm.toLowerCase()))
-            );
-          });
-          setFilteredJobs(filtered); // Guarda los resultados filtrados
-          
-        } else {
-          setFilteredJobs(allJobs);
-        }
-      } catch (error) {
-        console.error('Error en la solicitud:', error);
-      }
-      setIsLoading(false)
-    }*/
-
-
 
   //use effect
   React.useEffect(() => {
     loadJobs();
   }, [searchTerm, selectedTag])
 
-  //const para las paginas con la data filtrada
-  const jobsPerPage = 20;
+
+  // const para las paginas con la data filtrada
+  const jobsPerPage = 10;
+
+  const totalJobs = filteredJobs?.length || 0;
+  const totalPages = Math.ceil(totalJobs / jobsPerPage);
+
+  const handleChangeTab = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setTab(newValue);
+  };
+
   const startIndex = tab * jobsPerPage;
   const endIndex = startIndex + jobsPerPage;
   const displayedJobs = filteredJobs?.slice(startIndex, endIndex) || [];
-
-  //const filteredTags = jobs?.filter(job => !selectedTag || job.tags?.includes(selectedTag));
 
   if (isLoading) {
     return (<Loading isLoading={isLoading} />)
@@ -178,12 +170,7 @@ export default function JobsPage({ params }: { params: { id: string } }) {
     <div>
       <Container>
         <Typography variant="h4">Búsqueda de Trabajos</Typography>
-
-        {/* Pestañas */}
-        <Tabs value={0} onChange={handleChangeTab} centered>
-          <Tab label="Página 1" />
-        </Tabs>
-
+        
         {/* Contenido de pestañas */}
         {filteredJobs && filteredJobs.length > 0 ? (
           <Grid container spacing={3}>
@@ -192,7 +179,13 @@ export default function JobsPage({ params }: { params: { id: string } }) {
               <JobTags tags={allTags} onTagClick={handleTagClick} selectedTag={selectedTag} />
             </Grid>
             <Grid item xs={12} md={8}>
-              {displayedJobs && <JobList jobs={displayedJobs} />}
+              {displayedJobs && (
+                <JobList
+                  jobs={displayedJobs}
+                  handleInterestClick={handleInterestClick}
+                  interestState={interestState}
+                />
+              )}
               <Button
                 variant="contained"
                 color="primary"
@@ -214,58 +207,14 @@ export default function JobsPage({ params }: { params: { id: string } }) {
         )}
 
         {/* Lógica para agregar una nueva página al llegar al límite */}
-        {filteredJobs && filteredJobs.length > 0 && filteredJobs.length % jobsPerPage === 0 && (
-          <Tabs value={tab + 1} onChange={handleChangeTab} centered>
-            <Tab label={`Página ${tab + 2}`} />
+        {totalPages > 1 && (
+          <Tabs value={tab} onChange={handleChangeTab} centered>
+            {[...Array(totalPages)].map((_, index) => (
+              <Tab key={index} label={`Página ${index + 1}`} />
+            ))}
           </Tabs>
         )}
       </Container>
     </div>
   );
-
-
-  /*
-  return (
-    <div >
-      <Container>
-        <Typography variant="h4">Búsqueda de Trabajos</Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
-            <JobSearch onSearch={handleSearch} />
-            <JobTags tags={allTags} onTagClick={handleTagClick} selectedTag={selectedTag} />
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <div>
-              {filteredJobs && <JobList jobs={filteredJobs} />}
-              <Button variant="contained" color="primary" sx={{ backgroundColor: "0B3299" }} href="/"
-                style={{
-                  position: 'absolute',
-                  top: 10, // Ajusta la posición superior según tu diseño
-                  left: 10, // Ajusta la posición derecha según tu diseño
-                }}>
-                <HomeIcon />
-                Home
-              </Button>
-            </div>
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
-  );*/
-
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

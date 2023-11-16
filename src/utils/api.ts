@@ -82,3 +82,67 @@ export async function GetJobApi() {
     throw error
   }
 }
+
+
+
+/*
+export async function registerInteres(userId: string, jobId: string, unregister: boolean = false) {
+  try {
+    // Define la URL de la API para vincular/desvincular usuarios a trabajos
+    const apiUrl = `http://localhost:8080/ofertas/historial/${userId}`;
+
+    // Crea el objeto de datos con el jobId
+    const requestData = {
+      offedId: jobId,
+    };
+
+    // Utiliza el método HTTP apropiado (POST para registrar, DELETE para desvincular)
+    const method = unregister ? 'DELETE' : 'POST';
+
+    // Realiza la solicitud a la API
+    const response = await Axios({
+      method: method,
+      url: apiUrl,
+      data: requestData,
+    });
+
+    // Devuelve la respuesta
+    return response.data;
+  } catch (error) {
+    // Maneja los errores
+    console.error('Error al gestionar interés:', error);
+    throw error;
+  }
+}*/
+
+
+export async function registerInteres(userId: string, jobId: string): Promise<void> {
+  try {
+    // Define la URL de la API para vincular o desvincular usuarios de trabajos
+    const apiUrl = `http://localhost:8080/ofertas/historial/${userId}`;
+
+    // Consulta la API para verificar si ya existe una vinculación
+    const checkResponse = await Axios.get(apiUrl);
+
+    // Verifica si jobId está en la lista de trabajos vinculados
+    const isJobLinked = checkResponse.data.includes(jobId);
+
+    if (isJobLinked) {
+      // Si ya está vinculado, realiza una solicitud DELETE para desvincular
+      await Axios.delete(`${apiUrl}/${jobId}`);
+      console.log(`Usuario desvinculado del trabajo con ID: ${jobId}`);
+    } else {
+      // Si no está vinculado, realiza una solicitud POST para vincular
+      const requestData = {
+        offedId: jobId,
+      };
+
+      await Axios.post(apiUrl, requestData);
+      console.log(`Usuario vinculado al trabajo con ID: ${jobId}`);
+    }
+  } catch (error) {
+    // Maneja los errores
+    console.error('Error al gestionar interés:');
+    throw error;
+  }
+}
