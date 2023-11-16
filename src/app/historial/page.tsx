@@ -1,5 +1,6 @@
 "use client"
 import JobList from "@/components/JobList";
+import Loading from "@/components/Loading";
 import Navbar from "@/components/Navbar";
 
 import { useAppSelector } from "@/redux/hooks"
@@ -10,13 +11,15 @@ import React, { useEffect } from "react"
 export default function Historial() {
   const [userRes, setUserRes] = React.useState(null)
   const [jobs, setJobs]: [any[] | null, any] = React.useState<any[] | null>(null);
+  const [isLoading,setIsLoading] = React.useState(true)
+
   const user = useAppSelector(state => state.user)
 
   async function loadJobs() {
     try {
       const {data} = await GetHistorial(user?.id)
-      console.log("Data: ",data)
       setJobs(data)
+      setIsLoading(false)
     } catch (err) {
       console.error(err)
     }
@@ -31,6 +34,11 @@ export default function Historial() {
 
   // Este efecto se dispara solo cuando `jobs` cambia
   useEffect(() => {}, [jobs]);
+
+  if(isLoading){
+    return(<Loading isLoading={isLoading}/>)
+  }
+
 
   return (
     <div>
