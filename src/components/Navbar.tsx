@@ -83,7 +83,7 @@ export default function NavBar() {
                           )
                         }
 
-                        <Button color="inherit" onClick={() => { router.push(`/profile/${user.id}`) }}>
+                        <Button color="inherit" onClick={handleMenu}>
                           {user?.name}
                         </Button>
                       </Box>

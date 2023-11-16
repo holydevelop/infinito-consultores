@@ -222,12 +222,6 @@ export default function Proposal() {
                 </Snackbar>
 
                 <Loading isLoading={isLoading} />
-                <Grid item>
-                  <Button variant="contained" color="primary" href="/" sx={{ backgroundColor: "0B3299" }}>
-                    <HomeIcon />
-                    Home
-                  </Button>
-                </Grid>
               </Box>
             </Box>
 

@@ -21,6 +21,7 @@ import { useSession } from 'next-auth/react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/redux/hooks';
+import { AbsoluteString } from 'next/dist/lib/metadata/types/metadata-types';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -32,6 +33,7 @@ interface FormErrors {
   password?: string;
   cellphone?: string;
   dateofbirth?: string;
+  profession?: AbsoluteString
 }
 
 interface RegisterResponse {
@@ -93,7 +95,7 @@ export default function SignUp() {
         dateofbirth: date,
         rut: String(data.get('rut')),
         cellphone: String(data.get('cellphone')),
-        profession: "INFORMATICA",
+        profession: String(data.get('profession')),
         name: String(`${data.get('firstName')} ${data.get('lastName')}`),
         firstName: String(data.get('firstName')),
         lastName: String(data.get('lastName'))
@@ -220,10 +222,20 @@ export default function SignUp() {
                     error={formErrors.cellphone ? true : false}
                     helperText={formErrors.cellphone}
                   />
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="profession"
+                      label="Profesion"
+                      name="profession"
+                      error={formErrors.profession ? true : false}
+                      helperText={formErrors.email}
+                    />
+                  </Grid>
                 </Grid>
                 <Grid item xs={12} container justifyContent={"center"}>
                   <Calendar setDate={setDate} formErrors={formErrors}
-
                   />
                 </Grid>
               </Grid>

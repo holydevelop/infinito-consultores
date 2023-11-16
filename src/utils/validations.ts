@@ -70,6 +70,7 @@ export function validData(data: {
   email?: string;
   password?: string;
   cellphone?: string;
+  profession?: string
   
 }): { errors: { [key: string]: string } } {
   const errors: { [key: string]: string } = {};
@@ -80,6 +81,10 @@ export function validData(data: {
 
   if (!data.lastName) {
     errors.lastName = 'El campo apellido no puede estar vacío';
+  }
+
+  if (!data.profession) {
+    errors.firstName = 'El campo profesion no puede estar vacío, es posible modificarlo mas tarde';
   }
 
   // Validación de email
