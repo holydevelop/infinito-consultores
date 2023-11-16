@@ -1,5 +1,3 @@
-
-import Navbar from '@/components/Navbar'
 import SessionManager from '@/components/SessionManager'
 import SessionAuthProvider from '@/context/SessionAuthProvider'
 import { Providers } from '@/redux/providers'
@@ -22,7 +20,6 @@ export default function RootLayout({
           <SessionAuthProvider>
             <Providers>
               <SessionManager>
-                <Navbar/>
                 {children}
               </SessionManager>
             </Providers>
