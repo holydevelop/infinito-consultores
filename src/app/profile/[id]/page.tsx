@@ -20,7 +20,7 @@ import {
 import HomeIcon from '@mui/icons-material/Home';
 import EditIcon from '@mui/icons-material/Edit';
 
-import "./styles.css";
+import "./styles.css"
 
 import { ExistProfile, GetDocument, GetUserApi, PutUserApi } from '@/utils/api';
 import Loading from '@/components/Loading';

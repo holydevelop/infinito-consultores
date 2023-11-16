@@ -193,20 +193,6 @@ export default function JobsPage({ params }: { params: { id: string } }) {
             </Grid>
             <Grid item xs={12} md={8}>
               {displayedJobs && <JobList jobs={displayedJobs} />}
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ backgroundColor: "0B3299" }}
-                href="/"
-                style={{
-                  position: 'absolute',
-                  top: 10,
-                  left: 10,
-                }}
-              >
-                <HomeIcon />
-                Home
-              </Button>
             </Grid>
           </Grid>
         ) : (
