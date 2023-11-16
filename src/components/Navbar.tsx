@@ -33,7 +33,6 @@ export default function NavBar() {
 
   const router = useRouter()
 
-  const navBarVisible = useAppSelector(state => state.navStatus.status)
   const user = useAppSelector(state => state.user)
   const session = isObjectNotEmpty(user)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -50,7 +49,7 @@ export default function NavBar() {
     <>
       <CacheProvider value={cache}>
         {
-          navBarVisible && (
+          (
             <Box sx={{ flexGrow: 1 }}>
               <AppBar position="static">
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -71,19 +70,33 @@ export default function NavBar() {
                         <MenuItem onClick={() => { router.push(`/historial`) }}>Postulaciones</MenuItem>
                         <MenuItem onClick={() => signOut()}>Cerrar Sesión</MenuItem>
                       </Menu>
-                      <Button color="inherit" onClick={handleMenu}>
-                        {user?.name}
-                      </Button>
+                      <Box sx={{ justifyContent: "space-between" }}>
+                        <Button color="inherit" onClick={() => { router.push("/jobs") }}>
+                          {"Trabajos"}
+                        </Button>
+
+                        {
+                          user.rol === "Reclutador" && (
+                            <Button color="inherit" onClick={() => { router.push("/proposal") }}>
+                              {"Propuestas"}
+                            </Button>
+                          )
+                        }
+
+                        <Button color="inherit" onClick={() => { router.push(`/profile/${user.id}`) }}>
+                          {user?.name}
+                        </Button>
+                      </Box>
                     </>
                   ) : (
-                    <>
+                    <Box>
                       <Button color="inherit" onClick={() => router.push("/login")}>
                         Iniciar Sesión
                       </Button>
                       <Button color="inherit" onClick={() => router.push("/register")}>
                         Registrarse
                       </Button>
-                    </>
+                    </Box>
                   )}
                 </Toolbar>
               </AppBar>

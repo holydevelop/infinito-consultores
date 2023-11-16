@@ -27,7 +27,6 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import FileUploadComponent from '@/components/FileUpload';
-import { setTrueStatus } from '@/redux/features/navStatusSlice';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -43,8 +42,6 @@ interface Info {
 }
 
 export default function Profile({ params }: { params: { id: string } }) {
-  const dispatch = useAppDispatch();
-  dispatch(setTrueStatus())
   //Carga la actualizacion
   const { data: session, update } = useSession()
   //Carga del user state

@@ -24,7 +24,6 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useRouter } from 'next/navigation';
 import { Job } from '@/utils/job';
 import { useState } from 'react';
-import { setTrueStatus } from '@/redux/features/navStatusSlice';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -42,10 +41,6 @@ interface JobResponse {
 }
 
 export default function Proposal() {
-
-  const dispatch = useAppDispatch();
-  dispatch(setTrueStatus())
-
   const router = useRouter()
   const { data: session, status } = useSession()
 

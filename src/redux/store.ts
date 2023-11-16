@@ -2,12 +2,10 @@
 //componentes que se puede leer, donde se almamcenaran 
 import {configureStore} from '@reduxjs/toolkit'
 import userReducer from "./features/userSlice";
-import navReducer from "./features/navStatusSlice";
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
-    navStatus: navReducer
+    user: userReducer
   }
 })
 

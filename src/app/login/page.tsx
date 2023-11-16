@@ -20,14 +20,10 @@ import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setFalseStatus, setTrueStatus } from '@/redux/features/navStatusSlice';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const dispatch = useAppDispatch();
-  dispatch(setFalseStatus())  
-
   const router = useRouter()
   const { data: session, status } = useSession()
   const [failedLogin, setFailedLogin] = useState(false)
@@ -56,7 +52,6 @@ export default function SignIn() {
     }
 
     router.push("/")
-    dispatch(setTrueStatus())
   };
 
   if (status === "loading") {
@@ -120,8 +115,8 @@ export default function SignIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Olvidaste tu contraseña?
+                  <Link href="/" variant="body2">
+                    Volver al inicio
                   </Link>
                 </Grid>
                 <Grid item>

@@ -20,7 +20,6 @@ import { AxiosResponse } from 'axios';
 import { useSession } from 'next-auth/react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useRouter } from 'next/navigation';
-import { setFalseStatus, setTrueStatus } from '@/redux/features/navStatusSlice';
 import { useAppDispatch } from '@/redux/hooks';
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -63,10 +62,6 @@ function Calendar({ setDate, formErrors }: { setDate: any, formErrors: any }) {
 }
 
 export default function SignUp() {
-
-  const dispatch = useAppDispatch();
-  dispatch(setFalseStatus())
-
   const router = useRouter()
   const { data: session, status } = useSession()
   //UseState para la fecha sirve para recibir la fecha
@@ -133,7 +128,6 @@ export default function SignUp() {
         setIsLoading(false);
         alert("Cuenta creada con exito")
         router.push("/")
-        dispatch(setTrueStatus())
         return;
       }
 
@@ -242,10 +236,15 @@ export default function SignUp() {
                 Registrarse
               </Button>
               <Loading isLoading={isLoading} />
-              <Grid container justifyContent="center">
+              <Grid container direction="column" alignItems="center">
                 <Grid item>
                   <Link href="/login" variant="body2">
-                    Ya tienes cuenta? Inicia sesion
+                    Ya tienes cuenta? Inicia sesión
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="/" variant="body2">
+                    Volver al inicio
                   </Link>
                 </Grid>
               </Grid>

@@ -2,15 +2,10 @@
 
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { setTrueStatus } from '@/redux/features/navStatusSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import Navbar from '@/components/Navbar';
 
 export default function App() {
-
-  const dispatch = useAppDispatch();
-  dispatch(setTrueStatus())
-
   return (
     <div>
       <Navbar />

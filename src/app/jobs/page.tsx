@@ -15,7 +15,6 @@ import Axios from "axios";
 import { useRouter } from 'next/navigation';
 import { GetJobApi } from '@/utils/api';
 import Loading from '@/components/Loading';
-import { setTrueStatus } from '@/redux/features/navStatusSlice';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -30,10 +29,6 @@ interface Job {
 
 
 export default function JobsPage({ params }: { params: { id: string } }) {
-  //Carga la actualizacion
-  //const { data: session, update } = useSession()
-  const dispatch = useAppDispatch();
-  dispatch(setTrueStatus())
   //Carga del user state
   const user = useAppSelector(state => state.user)
 

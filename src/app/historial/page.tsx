@@ -2,14 +2,13 @@
 import JobList from "@/components/JobList";
 import Loading from "@/components/Loading";
 import Navbar from "@/components/Navbar";
-
-import { useAppSelector } from "@/redux/hooks"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { GetHistorial } from "@/utils/api"
 import { Job } from "@/utils/job";
 import React, { useEffect } from "react"
 
 export default function Historial() {
-  const [userRes, setUserRes] = React.useState(null)
+  const dispatch = useAppDispatch()
   const [jobs, setJobs]: [any[] | null, any] = React.useState<any[] | null>(null);
   const [isLoading,setIsLoading] = React.useState(true)
 
@@ -38,6 +37,7 @@ export default function Historial() {
   if(isLoading){
     return(<Loading isLoading={isLoading}/>)
   }
+
 
 
   return (

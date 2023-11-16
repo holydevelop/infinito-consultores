@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, Button, Grid } from '@mui/material';
+import { useAppSelector } from '../redux/hooks';
+import { useEffect } from 'react';
 
 // Definir un tipo para los trabajos
 
@@ -23,9 +25,6 @@ const JobList = ({ jobs }: JobListProps) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
 
-
-
-
   return (
     <div>
       {jobs &&
@@ -39,13 +38,16 @@ const JobList = ({ jobs }: JobListProps) => {
               ) : null}
               <Typography variant="body1">{job.fecha_publicacion}</Typography>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleDetailsClick(index)}
-                >
-                  Ver mas
-                </Button>
+                {
+                  (<Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleDetailsClick(index)}
+                  >
+                    Ver mas
+                  </Button>)
+                }
+
                 <Button
                   variant="contained"
                   color="primary"
