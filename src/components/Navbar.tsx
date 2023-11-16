@@ -49,38 +49,48 @@ export default function NavBar() {
   return (
     <>
       <CacheProvider value={cache}>
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
-            <Toolbar sx={{ justifyContent: 'space-between' }}>
-              <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                <Image src="https://flowbite.com/docs/images/logo.svg" alt="Infinito Consultores Logo" width={50} height={50} />
-                <Typography variant="h6" style={{ marginLeft: '8px' }}>
-                  Infinito Consultores
-                </Typography>
-              </Link>
-              {session ? (
-                <>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={() => { router.push(`/profile/${user?.id}`) }}>Perfil</MenuItem>
-                    <MenuItem onClick={() => { router.push(`/historial`) }}>Postulaciones</MenuItem>
-                    <MenuItem onClick={() => signOut()}>Cerrar Sesión</MenuItem>
-                  </Menu>
-                  <Button color="inherit" onClick={handleMenu}>
-                    {user?.name}
-                  </Button>
-                </>
-              ) : (
-                <Button color="inherit" onClick={() => router.push("/login")}>
-                  Iniciar Sesión
-                </Button>
-              )}
-            </Toolbar>
-          </AppBar>
-        </Box>
+        {
+          navBarVisible && (
+            <Box sx={{ flexGrow: 1 }}>
+              <AppBar position="static">
+                <Toolbar sx={{ justifyContent: 'space-between' }}>
+                  <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                    <Image src="https://flowbite.com/docs/images/logo.svg" alt="Infinito Consultores Logo" width={50} height={50} />
+                    <Typography variant="h6" style={{ marginLeft: '8px' }}>
+                      Infinito Consultores
+                    </Typography>
+                  </Link>
+                  {session ? (
+                    <>
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                      >
+                        <MenuItem onClick={() => { router.push(`/profile/${user?.id}`) }}>Perfil</MenuItem>
+                        <MenuItem onClick={() => { router.push(`/historial`) }}>Postulaciones</MenuItem>
+                        <MenuItem onClick={() => signOut()}>Cerrar Sesión</MenuItem>
+                      </Menu>
+                      <Button color="inherit" onClick={handleMenu}>
+                        {user?.name}
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button color="inherit" onClick={() => router.push("/login")}>
+                        Iniciar Sesión
+                      </Button>
+                      <Button color="inherit" onClick={() => router.push("/register")}>
+                        Registrarse
+                      </Button>
+                    </>
+                  )}
+                </Toolbar>
+              </AppBar>
+            </Box>
+          )
+        }
+
       </CacheProvider>
     </>
   );

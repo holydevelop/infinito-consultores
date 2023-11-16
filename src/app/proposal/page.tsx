@@ -14,6 +14,7 @@ import {
   CardContent,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Navbar from "@/components/Navbar";
 import Loading from '@/components/Loading';
 import { registerJob } from '@/utils/api';
 import { validDataJob } from '@/utils/validations';
@@ -132,7 +133,9 @@ export default function Proposal() {
     if (user.rol === 'Reclutador') {
 
       return (
-        <ThemeProvider theme={defaultTheme}>
+        <>
+          <Navbar />
+          <ThemeProvider theme={defaultTheme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
 
@@ -236,6 +239,7 @@ export default function Proposal() {
 
           </Container>
         </ThemeProvider>
+        </>
       );
     }
 

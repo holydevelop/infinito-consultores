@@ -19,8 +19,7 @@ import {
 } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import EditIcon from '@mui/icons-material/Edit';
-
-import "./styles.css"
+import Navbar from "@/components/Navbar";
 
 import { ExistProfile, GetDocument, GetUserApi, PutUserApi } from '@/utils/api';
 import Loading from '@/components/Loading';
@@ -303,7 +302,6 @@ export default function Profile({ params }: { params: { id: string } }) {
                   null
               }
             </Grid>
-
           </Container>
         </ThemeProvider >
       );

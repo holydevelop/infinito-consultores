@@ -13,7 +13,7 @@ export default function App() {
 
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <Grid item>
         <Button variant="contained" color="primary" href={`/proposal`} sx={{ backgroundColor: "0B3299" }}>
           Propuesta
