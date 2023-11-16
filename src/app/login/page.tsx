@@ -19,10 +19,14 @@ import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
 import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setFalseStatus, setTrueStatus } from '@/redux/features/navStatusSlice';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const dispatch = useAppDispatch();
+  dispatch(setFalseStatus())  
 
   const router = useRouter()
   const { data: session, status } = useSession()
@@ -41,7 +45,7 @@ export default function SignIn() {
       redirect: false
     })
 
-    if(resNextAuth?.status === 401){
+    if (resNextAuth?.status === 401) {
       setFailedLogin(true)
       setMsgError("Credenciales incorrectas. Verifica tu correo y contraseña")
       return
@@ -52,6 +56,7 @@ export default function SignIn() {
     }
 
     router.push("/")
+    dispatch(setTrueStatus())
   };
 
   if (status === "loading") {
@@ -91,7 +96,7 @@ export default function SignIn() {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                error={failedLogin? true : false}
+                error={failedLogin ? true : false}
                 helperText={msgError}
               />
               <TextField
@@ -103,7 +108,7 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                error={failedLogin? true : false}
+                error={failedLogin ? true : false}
               />
               <Button
                 type="submit"

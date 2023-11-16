@@ -92,3 +92,13 @@ export async function GetDocument(userId: String) {
     throw error
   }
 }
+
+//OBTIENE EL TRABAJO DE LA API SOLO 1 /ofertas/id
+export async function GetJobsById(jobId: String) {
+  try {
+    const res = await Axios.get(`${process.env.URL_API}/doc/user/${jobId}`)
+    return res.data
+  } catch (error: any) {
+    throw error
+  }
+}

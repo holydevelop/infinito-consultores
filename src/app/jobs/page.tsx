@@ -8,12 +8,13 @@ import JobTags from '../../components/JobTags';
 import JobList from '../../components/JobList';
 import HomeIcon from '@mui/icons-material/Home';
 import { useSession } from 'next-auth/react';
-import { useAppSelector } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { JobWall } from '@/utils/job';
 import Axios from "axios";
 import { useRouter } from 'next/navigation';
 import { GetJobApi } from '@/utils/api';
 import Loading from '@/components/Loading';
+import { setTrueStatus } from '@/redux/features/navStatusSlice';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -30,7 +31,8 @@ interface Job {
 export default function JobsPage({ params }: { params: { id: string } }) {
   //Carga la actualizacion
   //const { data: session, update } = useSession()
-
+  const dispatch = useAppDispatch();
+  dispatch(setTrueStatus())
   //Carga del user state
   const user = useAppSelector(state => state.user)
 
@@ -95,7 +97,7 @@ export default function JobsPage({ params }: { params: { id: string } }) {
   //funcion para buscar en base al buscador
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-  
+
     if (term.trim() !== '') {
       // Filtra los trabajos según el término de búsqueda
       const filtered = jobs?.filter(job => {

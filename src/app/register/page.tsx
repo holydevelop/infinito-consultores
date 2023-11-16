@@ -18,8 +18,10 @@ import { validData } from '@/utils/validations';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AxiosResponse } from 'axios';
 import { useSession } from 'next-auth/react';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useRouter } from 'next/navigation';
+import { setFalseStatus, setTrueStatus } from '@/redux/features/navStatusSlice';
+import { useAppDispatch } from '@/redux/hooks';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -61,6 +63,10 @@ function Calendar({ setDate, formErrors }: { setDate: any, formErrors: any }) {
 }
 
 export default function SignUp() {
+
+  const dispatch = useAppDispatch();
+  dispatch(setFalseStatus())
+
   const router = useRouter()
   const { data: session, status } = useSession()
   //UseState para la fecha sirve para recibir la fecha
@@ -127,9 +133,10 @@ export default function SignUp() {
         setIsLoading(false);
         alert("Cuenta creada con exito")
         router.push("/")
+        dispatch(setTrueStatus())
         return;
       }
-      
+
     };
 
     return (
