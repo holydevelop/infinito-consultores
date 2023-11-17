@@ -102,6 +102,15 @@ export async function GetDocument(userId: String) {
   }
 }
 
+export async function GetHistorial(jobId: String) {
+  try {
+    const res = await Axios.get(`${process.env.URL_API}/ofertas/historial/${jobId}`)
+    return res
+  } catch (error: any) {
+    throw error
+  }
+}
+
 //OBTIENE EL TRABAJO DE LA API SOLO 1 /ofertas/id
 export async function GetJobsById(jobId: String) {
   try {

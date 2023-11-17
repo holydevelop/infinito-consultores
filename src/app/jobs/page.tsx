@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Card, Container, Grid, Typography, Button, createTheme, Tabs, Tab } from '@mui/material';
 import JobSearch from '../../components/JobSearch';
+import Navbar from "@/components/Navbar";
 import JobTags from '../../components/JobTags';
 import JobList from '../../components/JobList';
 import HomeIcon from '@mui/icons-material/Home';
@@ -179,7 +180,7 @@ export default function JobsPage({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <NavBar></NavBar>
+      <Navbar />
       <Container>
         <Typography variant="h4">Búsqueda de Trabajos</Typography>
 
