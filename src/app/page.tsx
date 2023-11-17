@@ -15,15 +15,6 @@ export default function App() {
     <div style={{backgroundColor: '#D6D6D6'}}>
     <div>
       <Navbar />
-      <Grid item>
-        <Button variant="contained" color="primary" href={`/proposal`} sx={{ backgroundColor: "0B3299" }}>
-          Propuesta
-        </Button>
-        <Button variant="contained" color="primary" href={`/jobs`} sx={{ backgroundColor: "0B3299" }}>
-          Trabajos
-        </Button>
-      </Grid>
-      
       <div className="container">
       <Typography variant="h2" style={{ fontFamily: 'Montserrat', fontSize: '32px',fontStyle:'bold',letterSpacing:'1px' }}>Nuestros Servicios</Typography>
       <Typography variant="h1" style={{ fontFamily: 'Montserrat', fontSize: '38px',fontStyle:'bold',letterSpacing:'1px' }}>Búsqueda y selección de profesionales</Typography>
