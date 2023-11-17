@@ -83,8 +83,6 @@ export default function NavBar() {
         </Button>
         <Button variant="contained" color="primary" href={`/postulantes`} sx={{ backgroundColor: "0B3299" }}>
           Mis Ofertas
-        </Button><Button variant="contained" color="primary" href={`/jobs`} sx={{ backgroundColor: "0B3299" }}>
-          Ofertas de Trabajo
         </Button>
         </Grid>):( <></>)}
                   {session ? (
