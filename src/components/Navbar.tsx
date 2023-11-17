@@ -88,7 +88,9 @@ export default function NavBar() {
         </Button>
         </Grid>):( <></>)}
                   {session ? (
-                    <>
+                    <><Button variant="contained" color="primary" href={`/jobs`} sx={{ backgroundColor: "0B3299" }}>
+                    Ofertas de Trabajo
+                  </Button>
                       <Menu
                         anchorEl={anchorEl}
                         open={Boolean(anchorEl)}
