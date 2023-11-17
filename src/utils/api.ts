@@ -120,10 +120,18 @@ export async function GetJobsById(jobId: String) {
     throw error
   }
 }
-export async function PostDocument(userID: string,file: File) {
+export async function PostDocument(id: string, file: File) {
   try {
-    const res = await Axios.post(`${process.env.URL_API}/doc/user/${userID}`,file)
-    return res.data
-  } catch (error: any) {
-    throw error
-  }}
+    const formData = new FormData();
+    formData.append('file', file); // 'file' es el nombre del campo en el formulario, puedes ajustarlo según sea necesario
+    formData.append('userId', id)
+    const res = await Axios.post(`${process.env.URL_API}/doc`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return res;
+  } catch (error) {
+    throw error;
+  }
+}
