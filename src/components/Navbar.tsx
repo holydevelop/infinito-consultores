@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useAppSelector } from '@/redux/hooks';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Menu, MenuItem } from '@mui/material';
+import { Grid, Menu, MenuItem } from '@mui/material';
 import { signOut } from 'next-auth/react';
 
 /** @jsxImportSource @emotion/react */
@@ -26,6 +26,22 @@ function isObjectNotEmpty(obj: Record<string, string>) {
   }
   return true;
 }
+function admincheck(str:string){
+  if (str=="Admin"){
+    return true
+  }
+  else{
+    false
+  }
+}
+function reclutadorCheck(str:string){
+  if(str=="Reclutador"){
+    return true
+  }
+  else{
+    return false
+  }
+}
 
 const cache = createCache({ key: 'css', prepend: true });
 
@@ -36,6 +52,8 @@ export default function NavBar() {
   const navBarVisible = useAppSelector(state => state.navStatus.status)
   const user = useAppSelector(state => state.user)
   const session = isObjectNotEmpty(user)
+  const admin_check= admincheck(user.rol)
+  const reclutador_check= reclutadorCheck(user.rol)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -58,6 +76,15 @@ export default function NavBar() {
                   Infinito Consultores
                 </Typography>
               </Link>
+              {reclutador_check ? (<Grid><Button variant="contained" color="primary" href={`/proposal`} sx={{ backgroundColor: "0B3299" }}>
+          Nueva Oferta
+        </Button>
+        <Button variant="contained" color="primary" href={`/postulantes`} sx={{ backgroundColor: "0B3299" }}>
+          Mis Ofertas
+        </Button><Button variant="contained" color="primary" href={`/jobs`} sx={{ backgroundColor: "0B3299" }}>
+          Ofertas de Trabajo
+        </Button>
+        </Grid>):( <></>)}
               {session ? (
                 <>
                   <Menu

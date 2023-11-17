@@ -20,14 +20,7 @@ export default function App() {
     <div style={{backgroundColor: '#D6D6D6'}}>
     <div>
       <Navbar/>
-      <Grid item>
-        <Button variant="contained" color="primary" href={`/proposal`} sx={{ backgroundColor: "0B3299" }}>
-          Propuesta
-        </Button>
-        <Button variant="contained" color="primary" href={`/jobs`} sx={{ backgroundColor: "0B3299" }}>
-          Trabajos
-        </Button>
-      </Grid>
+      
       
       <div className="container">
       <Typography variant="h2" style={{ fontFamily: 'Montserrat', fontSize: '32px',fontStyle:'bold',letterSpacing:'1px' }}>Nuestros Servicios</Typography>
@@ -82,7 +75,7 @@ export default function App() {
         <Typography style={{ fontFamily: 'Montserrat', fontSize: '22px',fontStyle:'bold',letterSpacing:'1px', textAlign:'center' }} >
         Head Hunter     </Typography>
         <Typography style={{ fontFamily: 'Montserrat', fontSize: '16px',textAlign:'justify' }}>
-        El Head Hunter se basa fundamentalmente en la búsqueda de talentos a través de contactos o referidos,
+         El Head Hunter se basa fundamentalmente en la búsqueda de talentos a través de contactos o referidos,
                 investigando en las diferentes organizaciones para encontrar a los mejores candidatos pasivos que no
                 estén en buscando activa laboral.
         </Typography>

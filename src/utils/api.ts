@@ -82,6 +82,15 @@ export async function GetJobApi() {
     throw error
   }
 }
+export async function GetJobsPublished(userId:String){
+  try {
+    const res = await Axios.get(`${process.env.URL_API}/ofertas/user/${userId}`)
+    return res 
+  } catch (error: any) {
+    throw error
+  }
+
+}
 
 //OBTIENE EL TRABAJO DE LA API SOLO 1 /ofertas/id
 export async function GetDocument(userId: String) {
@@ -102,3 +111,10 @@ export async function GetJobsById(jobId: String) {
     throw error
   }
 }
+export async function PostDocument(userID: string,file: File) {
+  try {
+    const res = await Axios.post(`${process.env.URL_API}/doc/user/${userID}`,file)
+    return res.data
+  } catch (error: any) {
+    throw error
+  }}

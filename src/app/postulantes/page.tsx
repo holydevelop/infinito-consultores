@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { JobWall } from '@/utils/job';
 import Axios from "axios";
 import { useRouter } from 'next/navigation';
-import { GetJobApi, GetJobsPublished } from '@/utils/api';
+import { GetJobsPublished } from '@/utils/api';
 import Loading from '@/components/Loading';
 import { setTrueStatus } from '@/redux/features/navStatusSlice';
 import NavBar from '@/components/Navbar';
@@ -35,6 +35,7 @@ export default function JobsPage({ params }: { params: { id: string } }) {
   const dispatch = useAppDispatch();
   dispatch(setTrueStatus())
   //Carga del user state
+  const id =useAppSelector(state => state.user.id)
   const user = useAppSelector(state => state.user)
 
   //Carga de informacion
@@ -119,9 +120,9 @@ export default function JobsPage({ params }: { params: { id: string } }) {
   };
 
   //funcion async que procesa la carga de los trabajos
-  async function loadJobs() {
+  async function loadJobs(id: string) {
     try {
-      const response = await GetJobApi();
+      const response = await GetJobsPublished(id);
       const allJobs: Job[] = response.data;
 
       setJobs(allJobs);
@@ -134,34 +135,11 @@ export default function JobsPage({ params }: { params: { id: string } }) {
     }
     setIsLoading(false);
   }
-
-  /*
-        if (searchTerm.trim() !== '') {
-          const filtered = allJobs.filter(job => {
-            return (
-              job.posicion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              job.empresa?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              job.descripcion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              (job.tags && job.tags.toLowerCase().includes(searchTerm.toLowerCase()))
-            );
-          });
-          setFilteredJobs(filtered); // Guarda los resultados filtrados
-          
-        } else {
-          setFilteredJobs(allJobs);
-        }
-      } catch (error) {
-        console.error('Error en la solicitud:', error);
-      }
-      setIsLoading(false)
-    }*/
-
-
-
-  //use effect
+    //use effect
   React.useEffect(() => {
-    loadJobs();
-  }, [searchTerm, selectedTag])
+    if (id){loadJobs(id);}
+    
+  }, [id,searchTerm, selectedTag])
 
   //const para las paginas con la data filtrada
   const jobsPerPage = 20;
@@ -178,8 +156,9 @@ export default function JobsPage({ params }: { params: { id: string } }) {
 
 
   return (
+    
     <div>
-      <NavBar></NavBar>
+        <NavBar></NavBar>
       <Container>
         <Typography variant="h4">Búsqueda de Trabajos</Typography>
 
@@ -214,35 +193,7 @@ export default function JobsPage({ params }: { params: { id: string } }) {
   );
 
 
-  /*
-  return (
-    <div >
-      <Container>
-        <Typography variant="h4">Búsqueda de Trabajos</Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
-            <JobSearch onSearch={handleSearch} />
-            <JobTags tags={allTags} onTagClick={handleTagClick} selectedTag={selectedTag} />
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <div>
-              {filteredJobs && <JobList jobs={filteredJobs} />}
-              <Button variant="contained" color="primary" sx={{ backgroundColor: "0B3299" }} href="/"
-                style={{
-                  position: 'absolute',
-                  top: 10, // Ajusta la posición superior según tu diseño
-                  left: 10, // Ajusta la posición derecha según tu diseño
-                }}>
-                <HomeIcon />
-                Home
-              </Button>
-            </div>
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
-  );*/
-
+ 
 };
 
 
