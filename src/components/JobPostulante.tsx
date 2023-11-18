@@ -3,6 +3,15 @@ import React, { useState } from 'react';
 import { Card, CardContent, Typography, Button, Grid, createTheme } from '@mui/material';
 import { useAppSelector } from '@/redux/hooks';
 import { VerPostulantes } from '@/utils/api';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Profile from '@/app/profile/[id]/page';
+
 
 // Definir un tipo para los trabajos
 
@@ -14,7 +23,11 @@ interface Job {
   fecha_publicacion?: string
   _id?: any
 }
-
+interface User {
+  _id: string;
+  name: string;
+  // Puedes agregar otros campos si es necesario
+}
 type JobListProps = {
   jobs: Job[]; // Especifica el tipo de 'jobs'
 };
@@ -43,20 +56,34 @@ const theme = createTheme({
   // Otros ajustes del tema...
 });
 
-
 const JobPostulante = ({ jobs }: JobListProps) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [postulantes, setPostulantes] = useState<User[]>([]);
+
   const handleDetailsClick = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
-  const user = useAppSelector(state => state.user.id)
-  const handlePostulantesClick = (offerid: string) =>
-  {
-   console.log( VerPostulantes(offerid))
+
+  const handlePostulantesClick = async (offerid: string) => {
+    try {
+      const response = await VerPostulantes(offerid);
+      setPostulantes(response.data);
+      setOpenDialog(true);
+    } catch (error) {
+      console.error('Error fetching postulantes', error);
+    }
+  };
+  const handleProfileClick = (userId: string) => {
+    //Profile user id iframe
+
+    // Aquí puedes abrir el iframe con la página del perfil usando alguna lógica específica
+    // Puedes utilizar el estado o cualquier otra lógica según tus necesidades.
   };
 
-
-
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <div>
@@ -64,7 +91,7 @@ const JobPostulante = ({ jobs }: JobListProps) => {
         jobs.map((job, index) => (
           <Card key={index} style={{ marginBottom: '10px' }}>
             <CardContent>
-              <Typography variant="h5">{job.posicion}</Typography>
+            <Typography variant="h5">{job.posicion}</Typography>
               <Typography variant="subtitle1">{job.empresa}</Typography>
               {expandedIndex === index ? (
                 <Typography variant="body1">{job.descripcion}</Typography>
@@ -80,20 +107,45 @@ const JobPostulante = ({ jobs }: JobListProps) => {
                 >
                   Ver mas
                 </Button>
-                <Button sx={{backgroundColor: theme.palette.error.main}}
-                  variant="contained"
-                  color="primary"
-                  onClick={()=>handlePostulantesClick(job._id)}
-                >
-                  Ver Postulantes
-                </Button>
+                
+              <Button
+                sx={{ backgroundColor: theme.palette.error.main }}
+                variant="contained"
+                color="primary"
+                onClick={() => handlePostulantesClick(job._id)}
+              >
+                Ver Postulantes
+              </Button>
               </div>
             </CardContent>
           </Card>
         ))}
+
+      {/* Diálogo para mostrar la lista de postulantes */}
+      <Dialog open={openDialog} fullWidth maxWidth="lg" onClose={handleCloseDialog} style={{minWidth:'90%',minHeight:'90vh'}}>
+        <DialogTitle>Listado de Postulantes</DialogTitle>
+        <DialogContent>
+          <List>
+            {postulantes.map((user) => (
+              <ListItem
+                key={user._id}
+                button
+                onClick={() => handleProfileClick(user._id)}
+              >
+                <ListItemText primary={user.name} />
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
-
 };
+
 
 export default JobPostulante;
