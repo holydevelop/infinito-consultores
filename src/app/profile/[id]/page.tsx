@@ -30,8 +30,26 @@ import FileUploadComponent from '@/components/FileUpload';
 import { setTrueStatus } from '@/redux/features/navStatusSlice';
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#47708b',
+      dark:'#2e485a',
+      light:'#85a6bf'
+    },
+    secondary: {
+      main: '#3f88c5',
+    },
+    background: {
+      default: '#e6ebf2',
+    },
+    success: {
+      main: '#004292',
+      dark: '#10222e'
+    },
+    error: {
+      main: '#e1f1ff',
+    },}})
 interface Info {
   rut?: string;
   correo?: string;
@@ -136,12 +154,12 @@ export default function Profile({ params }: { params: { id: string } }) {
     if (validprofile) {
       return (
         <ThemeProvider theme={defaultTheme}>
-          <Container>
-            <Paper elevation={4} style={{ backgroundColor: '#4682B4', padding: '16px' }}>
+          <Container style={{backgroundColor:defaultTheme.palette.background.default,minHeight:'100vh',minWidth:'100%'}}>
+            <Paper elevation={4} style={{ backgroundColor: defaultTheme.palette.primary.main, padding: '16px' }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <Box display="flex" alignItems="center">
-                    <Avatar alt="Foto de perfil" style={{ width: '120px', height: '120px', marginRight: '16px', border: '2px solid #2196F3', backgroundColor: 'green' }}>
+                    <Avatar alt="Foto de perfil" style={{ width: '120px', height: '120px', marginRight: '16px', border: '2px solid #2196F3', backgroundColor: defaultTheme.palette.primary.dark }}>
                       {obtenerIniciales(String(info?.nombre))}
                     </Avatar>
                     <Typography variant="h4" style={{ color: '#fff', fontFamily: 'Quicksand', fontSize: '48px' }} gutterBottom>
@@ -151,7 +169,7 @@ export default function Profile({ params }: { params: { id: string } }) {
                 </Grid>
               </Grid>
             </Paper>
-            <Card style={{ backgroundColor: '#F5FFFA' }} >
+            <Card style={{ backgroundColor: defaultTheme.palette.error.main }} >
               <CardHeader title="Información profesional" />
               <CardContent>
                 <Container className='main-grid' sx={{ display: "flex", justifyContent: "space-between", width: "100%", height: "100%", alignContent: "center" }}>
@@ -269,7 +287,7 @@ export default function Profile({ params }: { params: { id: string } }) {
               {
                 (user.id === info?.id) && !isEditing ?
                   <Grid item>
-                    <Button variant="contained" color="primary" sx={{ backgroundColor: '#5B2C6F' }} onClick={() => { setIsEditing(true) }}>
+                    <Button variant="contained" color="primary" sx={{ backgroundColor: defaultTheme.palette.success.main }} onClick={() => { setIsEditing(true) }}>
                       <EditIcon />
                       Editar Perfil
                     </Button>
@@ -293,7 +311,7 @@ export default function Profile({ params }: { params: { id: string } }) {
               {
                 isEditing ?
                   <Grid item>
-                    <Button variant="contained" color="error" onClick={() => { setIsEditing(false) }}>
+                    <Button variant="contained" color="secondary" onClick={() => { setIsEditing(false) }}>
                       <EditIcon />
                       Cancelar Cambios
                     </Button>

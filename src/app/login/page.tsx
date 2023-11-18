@@ -22,7 +22,30 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setFalseStatus, setTrueStatus } from '@/redux/features/navStatusSlice';
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#47708b',
+      dark:'#2e485a',
+    },
+    secondary: {
+      main: '#3f88c5',
+    },
+    background: {
+      default: '#e6ebf2',
+    },
+    success: {
+      main: '#004292',
+      dark: '#10222e'
+    },
+    error: {
+      main: '#a37871',
+    },
+
+    // Otros ajustes de paleta y estilos...
+  },
+  // Otros ajustes del tema...
+});
 
 export default function SignIn() {
   const dispatch = useAppDispatch();

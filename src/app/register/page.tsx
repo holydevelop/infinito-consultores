@@ -24,7 +24,27 @@ import { setFalseStatus, setTrueStatus } from '@/redux/features/navStatusSlice';
 import { useAppDispatch } from '@/redux/hooks';
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#47708b',
+      dark:'#2e485a',      
+      light:'#85a6bf'
+
+    },
+    secondary: {
+      main: '#3f88c5',
+    },
+    background: {
+      default: '#e6ebf2',
+    },
+    success: {
+      main: '#004292',
+      dark: '#10222e'
+    },
+    error: {
+      main: '#a37871',
+    },}})
 
 interface FormErrors {
   firstName?: string,
@@ -237,7 +257,7 @@ export default function SignUp() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 5, mb: 2 }}
+                sx={{ mt: 5, mb: 2,backgroundColor:defaultTheme.palette.success.main }}
               >
                 Registrarse
               </Button>

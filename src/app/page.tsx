@@ -6,23 +6,48 @@ import { setTrueStatus } from '@/redux/features/navStatusSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import Navbar from '@/components/Navbar';
 import "./styles.css"
-import { Typography } from '@mui/material';
+import { Typography, createTheme } from '@mui/material';
 import Card from '@mui/material/Card';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import CardContent from '@mui/material/CardContent';
+import PsychologyIcon from '@mui/icons-material/Psychology';
 export default function App() {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#47708b',
+        dark:'#2e485a',
+      },
+      secondary: {
+        main: '#3f88c5',
+      },
+      background: {
+        default: '#e6ebf2',
+      },
+      success: {
+        main: '#004292',
+        dark: '#10222e'
+      },
+      error: {
+        main: '#a37871',
+      },
+
+      // Otros ajustes de paleta y estilos...
+    },
+    // Otros ajustes del tema...
+  });
 
   const dispatch = useAppDispatch();
   dispatch(setTrueStatus())
 
   return (
-    <div style={{backgroundColor: '#D6D6D6'}}>
+    <div style={{backgroundColor: theme.palette.background.default}}>
     <div>
-      <Navbar />      
+    <Navbar />      
       <div className="container">
-      <Typography variant="h2" style={{ fontFamily: 'Montserrat', fontSize: '32px',fontStyle:'bold',letterSpacing:'1px' }}>Nuestros Servicios</Typography>
-      <Typography variant="h1" style={{ fontFamily: 'Montserrat', fontSize: '38px',fontStyle:'bold',letterSpacing:'1px' }}>Búsqueda y selección de profesionales</Typography>
+      <Typography  style={{ fontFamily: 'Montserrat', fontSize: '32px',fontStyle:'bold',letterSpacing:'1px' }}>Nuestros Servicios</Typography>
+      <Typography  style={{ fontFamily: 'Montserrat', fontSize: '38px',fontStyle:'bold',letterSpacing:'1px' }}>Búsqueda y selección de profesionales</Typography>
       <hr />
       <Typography style={{ fontFamily: 'Montserrat', fontSize: '16px',fontStyle:'bold',letterSpacing:'1px' }}>Reclutamiento y evaluaciones psicolaborales para distintas áreas de la empresa.</Typography>
       <style jsx>{`
@@ -36,24 +61,24 @@ export default function App() {
           width: 100px;
           border-radius: 4px; 
 
-          background: blue; // Línea separadora de color azul
+          background: ${theme.palette.primary.dark}; // Línea separadora de color azul
         }
         
       `}</style>
     </div>
     {/* Contenedor de la sección */}
-    <Box component="section" >
+    <Box  component="section" style={{backgroundColor:theme.palette.background.default, minHeight: '100vh'}} >
         {/* Grid container */}
-        <Grid container spacing={2} justifyContent="center" style={{backgroundColor:'#2D678A'}}>
+        <Grid container spacing={2} justifyContent="center" style={{backgroundColor:theme.palette.primary.dark}}>
           {/* Primer servicio */}
-          <Grid item xs={12} sm={6} md={3}>
-          <Card style={{backgroundColor:'#D9D9D7',height:'99%'}}>
+          <Grid item xs={12} sm={1} md={3}>
+          <Card style={{backgroundColor:theme.palette.background.default,height:'95%',width:'90%'}}>
       <CardContent>
-        <AccountCircleIcon color="secondary" style={{textAlign:'center', fontSize:'70px',display:'block'}}></AccountCircleIcon>
+        <AccountCircleIcon  style={{color:theme.palette.success.main ,textAlign:'center', fontSize:'70px',display:'block'}}></AccountCircleIcon>
 
         <Typography style={{ fontFamily: 'Montserrat', fontSize: '22px',fontStyle:'bold',letterSpacing:'1px', textAlign:'center' }} >
         Reclutamiento y Selección de profesionales        </Typography>
-        <Typography style={{ fontFamily: 'Montserrat', fontSize: '16px',textAlign:'justify' }}>
+        <Typography style={{ fontFamily: 'Montserrat', fontSize: '16px',textAlign:'justify',fontStretch:'100%' }}>
         Nuestras búsquedas y posterior selección de profesionales, están orientadas a realizar una evaluación
                 minuciosa del personal, cumpliendo con los requerimientos exigidos por nuestro cliente, enfocándonos no
                 sólo en el perfil técnico, sino que también con las habilidades blandas para un buen desempeño laboral.
@@ -65,10 +90,10 @@ export default function App() {
           </Grid>
 
           {/* Segundo servicio */}
-          <Grid item xs={12} sm={6} md={3}>
-          <Card style={{backgroundColor:'#D9D9D7',height:'99%'}}>
+          <Grid item xs={12} sm={1} md={3}>
+          <Card style={{backgroundColor:theme.palette.background.default,height:'95%',width:'90%'}}>
       <CardContent>
-        <BusinessCenterIcon color="secondary" style={{display:'block',alignItems:'center', fontSize:'70px'}}></BusinessCenterIcon>
+      <BusinessCenterIcon color="secondary" style={{color:theme.palette.success.main ,textAlign:'center', fontSize:'60px',display:'block'}}></BusinessCenterIcon>
 
         <Typography style={{ fontFamily: 'Montserrat', fontSize: '22px',fontStyle:'bold',letterSpacing:'1px', textAlign:'center' }} >
         Head Hunter     </Typography>
@@ -85,11 +110,28 @@ export default function App() {
           </Grid>
 
           {/* Otros servicios van aquí, replicando la misma estructura */}
+          <Grid item xs={12} sm={1} md={3}>
+          <Card style={{backgroundColor:theme.palette.background.default,height:'95%',width:'90%'}}>
+      <CardContent>
+      <PsychologyIcon color="secondary" style={{color:theme.palette.success.main ,textAlign:'center', fontSize:'60px',display:'block'}}></PsychologyIcon>
+
+        <Typography style={{ fontFamily: 'Montserrat', fontSize: '22px',fontStyle:'bold',letterSpacing:'1px', textAlign:'center' }} >
+        Evaluaciones Psicolaborales     </Typography>
+        <Typography style={{ fontFamily: 'Montserrat', fontSize: '16px',textAlign:'justify' }}>
+        Este Servicio es un conjunto de técnicas utilizadas para conocer rasgos ocultos del candidato que no puedes ser determinados en una entrevista personal. Se utiliza para determinar si el candidato es psicológicamente apto para el cargo al que postula.
+        </Typography>
+
+      </CardContent>
+
+    </Card>
+            
+          </Grid>
 
         </Grid>
       </Box>
     </div>
     </div>
+    
   )
 }
 

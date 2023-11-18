@@ -1,5 +1,5 @@
 'use client'
-
+import "../styles.css"
 import * as React from 'react';
 import { useState } from 'react';
 import { Card, Container, Grid, Typography, Button, createTheme, Tabs, Tab } from '@mui/material';
@@ -18,8 +18,30 @@ import { setTrueStatus } from '@/redux/features/navStatusSlice';
 import NavBar from '@/components/Navbar';
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#47708b',
+      dark:'#2e485a',
+    },
+    secondary: {
+      main: '#3f88c5',
+    },
+    background: {
+      default: '#e6ebf2',
+    },
+    success: {
+      main: '#004292',
+      dark: '#10222e'
+    },
+    error: {
+      main: '#a37871',
+    },
 
+    // Otros ajustes de paleta y estilos...
+  },
+  // Otros ajustes del tema...
+});
 interface Job {
   posicion?: string;
   empresa?: string;
@@ -159,12 +181,12 @@ export default function JobsPage({ params }: { params: { id: string } }) {
     
     <div>
         <NavBar></NavBar>
-      <Container>
-        <Typography variant="h4">Búsqueda de Trabajos</Typography>
+      <Container style={{backgroundColor:defaultTheme.palette.background.default,minWidth:'100%',minHeight:'100vh'}}>
+      <Typography style={{ textAlign:'center',fontFamily: 'Montserrat', fontSize: '36px',fontStyle:'bold',letterSpacing:'1px' }} variant="h4">Búsqueda de Trabajos</Typography>
 
         {/* Pestañas */}
         <Tabs value={0} onChange={handleChangeTab} centered>
-          <Tab label="Página 1" />
+        <Tab label="Página 1" style={{fontSize:'18px'}} />
         </Tabs>
 
         {/* Contenido de pestañas */}

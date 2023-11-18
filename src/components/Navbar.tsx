@@ -10,12 +10,13 @@ import Image from 'next/image';
 import { useAppSelector } from '@/redux/hooks';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Grid, Menu, MenuItem } from '@mui/material';
+import { Menu, MenuItem,Stack, createTheme } from '@mui/material';
 import { signOut } from 'next-auth/react';
 
 /** @jsxImportSource @emotion/react */
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
+import { useTheme } from '@mui/material/styles';
 
 
 function isObjectNotEmpty(obj: Record<string, string>) {
@@ -46,6 +47,29 @@ function reclutadorCheck(str:string){
 const cache = createCache({ key: 'css', prepend: true });
 
 export default function NavBar() {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#47708b',
+        dark:'#2e485a',
+      },
+      secondary: {
+        main: '#3f88c5',
+      },
+      background: {
+        default: '#e6ebf2',
+      },
+      success: {
+        main: '#004292',
+        dark: '#10222e'
+      },
+      error: {
+        main: '#0B2E88',
+      },
+      // Otros ajustes de paleta y estilos...
+    },
+    // Otros ajustes del tema...
+  });
 
   const router = useRouter()
 
@@ -70,25 +94,34 @@ export default function NavBar() {
         {
           navBarVisible && (
             <Box sx={{ flexGrow: 1 }}>
-              <AppBar position="static">
+              <AppBar position="static" sx={{backgroundColor: theme.palette.primary.main}}>
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
-                  <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                  <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#FFFFFF' }}>
                     <Image src="https://flowbite.com/docs/images/logo.svg" alt="Infinito Consultores Logo" width={50} height={50} />
                     <Typography variant="h6" style={{ marginLeft: '8px' }}>
                       Infinito Consultores
                     </Typography>
                   </Link>
-              {reclutador_check ? (<Grid><Button variant="contained" color="primary" href={`/proposal`} sx={{ backgroundColor: "0B3299" }}>
+                  {session ? (<>
+                  {reclutador_check ?(<><Stack direction={'row'}><Button variant="contained" color="primary" href={`/proposal`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.main,fontFamily:'Montserrat' }}>
           Nueva Oferta
         </Button>
-        <Button variant="contained" color="primary" href={`/postulantes`} sx={{ backgroundColor: "0B3299" }}>
+        <Button variant="contained" color="primary" href={`/postulantes`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.main,fontFamily:'Montserrat' }}>
           Mis Ofertas
         </Button>
-        </Grid>):( <></>)}
-                  {session ? (
-                    <><Button variant="contained" color="primary" href={`/jobs`} sx={{ backgroundColor: "0B3299" }}>
+        <Button variant="contained" color="primary" href={`/jobs`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.main,fontFamily:'Montserrat' }}>
                     Ofertas de Trabajo
-                  </Button>
+                  </Button></Stack></>)
+                  :(<><Stack direction={'row'}>
+                <Button variant="contained" color="primary" href={`/jobs`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.main,fontFamily:'Montserrat' }}>
+                            Ofertas de Trabajo
+                          </Button>
+                          </Stack></>)}</>)
+                  :(<></>)}
+                
+              
+                  {session ? (
+                    <>
                       <Menu
                         anchorEl={anchorEl}
                         open={Boolean(anchorEl)}
@@ -103,13 +136,13 @@ export default function NavBar() {
                       </Button>
                     </>
                   ) : (
-                    <>
-                      <Button color="inherit" onClick={() => router.push("/login")}>
-                        Iniciar Sesión
-                      </Button>
-                      <Button color="inherit" onClick={() => router.push("/register")}>
-                        Registrarse
-                      </Button>
+                    <><Stack direction={'row'}><Button color="inherit" onClick={() => router.push("/login")}>
+                    Iniciar Sesión
+                  </Button>
+                  <Button color="inherit" onClick={() => router.push("/register")}>
+                    Registrarse
+                  </Button></Stack>
+                      
                     </>
                   )}
                 </Toolbar>

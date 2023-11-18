@@ -1,5 +1,5 @@
 "use client"
-
+import "../styles.css"
 import * as React from 'react';
 import { Container, Typography, TextField, Button, Collapse, Snackbar } from '@mui/material';
 import Paper from '@mui/material/Paper';
@@ -27,8 +27,25 @@ import { useState } from 'react';
 import { setTrueStatus } from '@/redux/features/navStatusSlice';
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#47708b',
+      dark:'#2e485a',
+    },
+    secondary: {
+      main: '#3f88c5',
+    },
+    background: {
+      default: '#e6ebf2',
+    },
+    success: {
+      main: '#004292',
+      dark: '#10222e'
+    },
+    error: {
+      main: '#0B2E88',
+    },}});
 interface FormErrors {
   posicion?: string,
   empresa?: string,
@@ -148,8 +165,8 @@ export default function Proposal() {
                 alignItems: 'center',
               }}
             >
-              <Typography component="h1" variant="h5">
-                PROPUESTA DE TRABAJO
+              <Typography style={{ textAlign:'center',fontFamily: 'Montserrat', fontSize: '36px',fontStyle:'bold',letterSpacing:'1px' }} variant="h4">
+                Propuesta de Trabajo
               </Typography>
               <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
@@ -209,11 +226,11 @@ export default function Proposal() {
                     />
                   </Grid>
                 </Grid>
-                <Button
+                <Button 
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 5, mb: 2 }}
+                  sx={{ mt: 5, mb: 2, backgroundColor:defaultTheme.palette.error.main}}
                 //onClick={() => setOpen(true)}
                 >
                   Enviar Propuesta
