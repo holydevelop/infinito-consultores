@@ -4,6 +4,7 @@ export interface Job{
   descripcion?: String,
   tags?: String,
   reclutadorId?: String
+  _id: String
 }
 
 export interface JobWall{

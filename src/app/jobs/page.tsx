@@ -46,11 +46,12 @@ const defaultTheme = createTheme({
   // Otros ajustes del tema...
 });
 interface Job {
-  posicion?: string;
-  empresa?: string;
-  descripcion?: string,
+  posicion?: string,
+  empresa?: string,
+  descripcion: string,
   tags?: string[],
   fecha_publicacion?: string
+  _id?: any
 }
 
 

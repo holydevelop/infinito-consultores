@@ -1,15 +1,18 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, Button, Grid, createTheme } from '@mui/material';
+import { useAppSelector } from '@/redux/hooks';
+import { Postular } from '@/utils/api';
 
 // Definir un tipo para los trabajos
 
 interface Job {
   posicion?: string,
   empresa?: string,
-  descripcion?: string,
+  descripcion: string,
   tags?: string[],
   fecha_publicacion?: string
+  _id?: any
 }
 
 type JobListProps = {
@@ -46,6 +49,11 @@ const JobList = ({ jobs }: JobListProps) => {
   const handleDetailsClick = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
+  const user = useAppSelector(state => state.user.id)
+  const handlePostularClick = (offerid: string, id: string) =>
+  {
+    Postular(offerid,id);
+  };
 
 
 
@@ -75,6 +83,7 @@ const JobList = ({ jobs }: JobListProps) => {
                 <Button sx={{backgroundColor: theme.palette.error.main}}
                   variant="contained"
                   color="primary"
+                  onClick={()=>handlePostularClick(job._id,user)}
                 >
                   Me interesa
                 </Button>

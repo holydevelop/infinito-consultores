@@ -102,11 +102,38 @@ export async function GetDocument(userId: String) {
   }
 }
 
-export async function GetHistorial(jobId: String) {
+export async function GetHistorial(userId: String) {
   try {
-    const res = await Axios.get(`${process.env.URL_API}/ofertas/historial/${jobId}`)
+    const res = await Axios.get(`${process.env.URL_API}/ofertas/postulacion/user/${userId}`)
     return res
   } catch (error: any) {
+    throw error
+  }
+}
+export async function Postular(offerId:string,userId: string){
+  const data ={postulanteId:userId}
+  try {
+    const res = await Axios.post(`${process.env.URL_API}/ofertas/${offerId}`,data)
+  }
+  catch(error: any) {
+    throw error
+  }
+}
+export async function Estado(offerId:string,userId: string){
+  try {
+    const res = await Axios.get(`${process.env.URL_API}/ofertas/postulacion/${userId}/${offerId}`)
+    return res
+  }
+  catch(error: any) {
+    throw error
+  }
+}
+export async function Cancelar_Postulacion(offerId:string,userId: string){
+  try {
+    const res = await Axios.delete(`${process.env.URL_API}/ofertas/postulacion/${userId}/${offerId}`)
+    return res
+  }
+  catch(error: any) {
     throw error
   }
 }
