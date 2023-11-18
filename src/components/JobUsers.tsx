@@ -53,7 +53,7 @@ const JobUsers = ({ jobs }: JobListProps) => {
   const [estado, setEstado] = useState<string>('');
   const [colorEstado, setColorEstado] = useState<string>('');
   const [iconoEstado, setIconoEstado] = useState<React.ReactNode | null>(null);
-  var postul:string='null';
+  const [currentOfferId, setCurrentOfferId] = useState<string | string>('null');
 
   const handleDetailsClick = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -63,7 +63,7 @@ const JobUsers = ({ jobs }: JobListProps) => {
     try {
       setLoading(true);
       const estadoResponse = await Estado(offerid, id);
-      postul=offerid
+      setCurrentOfferId(offerid);
       abrirDialogo(estadoResponse.data.estado);
     } catch (error) {
       console.error('Error al obtener el estado:', error);
@@ -192,7 +192,7 @@ const JobUsers = ({ jobs }: JobListProps) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleConfirmationDialogClose}>No</Button>
-          <Button onClick={()=>handleCancelarPostulacion(postul,user)} autoFocus>
+          <Button onClick={()=>handleCancelarPostulacion(currentOfferId,user)} autoFocus>
             Sí
           </Button>
         </DialogActions>
