@@ -64,7 +64,7 @@ const JobUsers = ({ jobs }: JobListProps) => {
       setLoading(true);
       const estadoResponse = await Estado(offerid, id);
       postul=offerid
-      abrirDialogo(estadoResponse.data.postulacion);
+      abrirDialogo(estadoResponse.data.estado);
     } catch (error) {
       console.error('Error al obtener el estado:', error);
     } finally {
@@ -79,7 +79,7 @@ const JobUsers = ({ jobs }: JobListProps) => {
     switch (postulacion) {
       case 'Pendiente':
         icono = <WarningIcon />;
-        color = 'yellow';
+        color = '#FFD972';
         break;
       case 'Aceptada':
         icono = <CheckCircleOutlineIcon />;
@@ -177,8 +177,8 @@ const JobUsers = ({ jobs }: JobListProps) => {
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Estado de la Postulación</DialogTitle>
         <DialogContent>
-          <IconButton style={{ color: colorEstado }}>{iconoEstado}</IconButton>
-          <Typography variant="body1">{`Estado: ${estado}`}</Typography>
+          
+          <Typography variant="body1">{`Estado: ${estado}`}<IconButton style={{ color: colorEstado }}>{iconoEstado}</IconButton></Typography>
           {estado !== 'Cancelada' && (
             <Button onClick={handleConfirmationDialogOpen}>Cancelar Postulación</Button>
           )}

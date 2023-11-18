@@ -65,6 +65,7 @@ export default function NavBar() {
       },
       error: {
         main: '#0B2E88',
+        dark:'#385c74'
       },
       // Otros ajustes de paleta y estilos...
     },
@@ -103,17 +104,17 @@ export default function NavBar() {
                     </Typography>
                   </Link>
                   {session ? (<>
-                  {reclutador_check ?(<><Stack direction={'row'}><Button variant="contained" color="primary" href={`/proposal`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.main,fontFamily:'Montserrat' }}>
+                  {reclutador_check ?(<><Stack direction={'row'}><Button variant="contained" color="primary" href={`/proposal`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.dark,fontFamily:'Montserrat' }}>
           Nueva Oferta
         </Button>
-        <Button variant="contained" color="primary" href={`/postulantes`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.main,fontFamily:'Montserrat' }}>
+        <Button variant="contained" color="primary" href={`/postulantes`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.dark,fontFamily:'Montserrat' }}>
           Mis Ofertas
         </Button>
-        <Button variant="contained" color="primary" href={`/jobs`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.main,fontFamily:'Montserrat' }}>
+        <Button variant="contained" color="primary" href={`/jobs`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.dark,fontFamily:'Montserrat' }}>
                     Ofertas de Trabajo
                   </Button></Stack></>)
                   :(<><Stack direction={'row'}>
-                <Button variant="contained" color="primary" href={`/jobs`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.main,fontFamily:'Montserrat' }}>
+                <Button variant="contained" color="primary" href={`/jobs`} sx={{fontSize:'90%',backgroundColor: theme.palette.error.dark,fontFamily:'Montserrat' }}>
                             Ofertas de Trabajo
                           </Button>
                           </Stack></>)}</>)

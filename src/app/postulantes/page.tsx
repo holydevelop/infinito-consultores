@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Card, Container, Grid, Typography, Button, createTheme, Tabs, Tab } from '@mui/material';
 import JobSearch from '../../components/JobSearch';
 import JobTags from '../../components/JobTags';
-import JobList from '../../components/JobList';
+import JobPostulante from '../../components/JobPostulante';
 import HomeIcon from '@mui/icons-material/Home';
 import { useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -198,7 +198,7 @@ export default function JobsPage({ params }: { params: { id: string } }) {
               <JobTags tags={allTags} onTagClick={handleTagClick} selectedTag={selectedTag} />
             </Grid>
             <Grid item xs={12} md={8}>
-              {displayedJobs && <JobList jobs={displayedJobs} />}
+              {displayedJobs && <JobPostulante jobs={displayedJobs} />}
             </Grid>
           </Grid>
         ) : (

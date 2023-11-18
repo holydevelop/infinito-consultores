@@ -206,7 +206,7 @@ export default function JobsPage({ params }: { params: { id: string } }) {
     <div>
       <Navbar />
       <Container style={{backgroundColor:defaultTheme.palette.background.default,minWidth:'100%',minHeight:'100vh'}}>
-        <Typography style={{ textAlign:'center',fontFamily: 'Montserrat', fontSize: '36px',fontStyle:'bold',letterSpacing:'1px' }} variant="h4">Búsqueda de Trabajos</Typography>
+        <Typography style={{ textAlign:'center',fontFamily: 'Montserrat', fontSize: '36px',fontStyle:'bold',letterSpacing:'1px' }} variant="h4">Historial de Postulaciones</Typography>
 
         {/* Pestañas */}
         <Tabs value={0} onChange={handleChangeTab} centered>

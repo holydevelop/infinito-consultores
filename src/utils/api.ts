@@ -101,6 +101,14 @@ export async function GetDocument(userId: String) {
     throw error
   }
 }
+export async function VerPostulantes(userId: String) {
+  try {
+    const res = await Axios.get(`${process.env.URL_API}/ofertas/postulaciones/${userId}`)
+    return res
+  } catch (error: any) {
+    throw error
+  }
+}
 
 export async function GetHistorial(userId: String) {
   try {
