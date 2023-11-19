@@ -6,11 +6,9 @@ import { Card, Container, Grid, Typography, Button, createTheme, Tabs, Tab } fro
 import JobSearch from '../../components/JobSearch';
 import JobTags from '../../components/JobTags';
 import JobPostulante from '../../components/JobPostulante';
-import HomeIcon from '@mui/icons-material/Home';
-import { useSession } from 'next-auth/react';
+
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { JobWall } from '@/utils/job';
-import Axios from "axios";
+
 import { useRouter } from 'next/navigation';
 import { GetJobsPublished } from '@/utils/api';
 import Loading from '@/components/Loading';

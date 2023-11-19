@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import Profile from '@/app/profile/[id]/page';
+
 
 
 // Definir un tipo para los trabajos
@@ -60,6 +60,7 @@ const JobPostulante = ({ jobs }: JobListProps) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [postulantes, setPostulantes] = useState<User[]>([]);
+  const [expandedUserIds, setExpandedUserIds] = useState<string[]>([]);
 
   const handleDetailsClick = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -75,14 +76,15 @@ const JobPostulante = ({ jobs }: JobListProps) => {
     }
   };
   const handleProfileClick = (userId: string) => {
-    //Profile user id iframe
-
-    // Aquí puedes abrir el iframe con la página del perfil usando alguna lógica específica
-    // Puedes utilizar el estado o cualquier otra lógica según tus necesidades.
+    console.log(process.env.NEXTAUTH_URL)
+    setExpandedUserIds((prevIds) =>
+      prevIds.includes(userId) ? prevIds.filter((id) => id !== userId) : [...prevIds, userId]
+    );
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setExpandedUserIds([]);
   };
 
   return (
@@ -122,27 +124,41 @@ const JobPostulante = ({ jobs }: JobListProps) => {
         ))}
 
       {/* Diálogo para mostrar la lista de postulantes */}
-      <Dialog open={openDialog} fullWidth maxWidth="lg" onClose={handleCloseDialog} style={{minWidth:'90%',minHeight:'90vh'}}>
-        <DialogTitle>Listado de Postulantes</DialogTitle>
-        <DialogContent>
-          <List>
-            {postulantes.map((user) => (
-              <ListItem
-                key={user._id}
-                button
-                onClick={() => handleProfileClick(user._id)}
-              >
-                <ListItemText primary={user.name} />
-              </ListItem>
-            ))}
-          </List>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Cerrar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Dialog open={openDialog} fullWidth maxWidth="lg" onClose={handleCloseDialog} style={{ minWidth: '90%', minHeight: '80vh' }}>
+  <DialogTitle>Listado de Postulantes</DialogTitle>
+  <DialogContent>
+    <List>
+      {postulantes.map((user) => (
+        <React.Fragment key={user._id}>
+          <ListItem
+            button
+            onClick={() => handleProfileClick(user._id)}
+            selected={expandedUserIds.includes(user._id)}
+            style={{ backgroundColor: theme.palette.background.default }}
+          >
+            <ListItemText primary={user.name} />
+          </ListItem>
+          {expandedUserIds.includes(user._id) && (
+            <ListItem>
+              <Grid container>
+                <Grid item xs={12}>
+                  <div style={{ minHeight: '80vh' }}>
+                    <iframe src={`/profile/${user._id}`} width="100%" height="100vh" style={{minHeight:'80vh'}}/>
+                  </div>
+                </Grid>
+              </Grid>
+            </ListItem>
+          )}
+        </React.Fragment>
+      ))}
+    </List>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseDialog} color="primary">
+      Cerrar
+    </Button>
+  </DialogActions>
+</Dialog>
     </div>
   );
 };
