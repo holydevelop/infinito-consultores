@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Menu, MenuItem,Stack, createTheme } from '@mui/material';
 import { signOut } from 'next-auth/react';
-
+import reclutalento from "../../public/Untitled.png";
 /** @jsxImportSource @emotion/react */
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
@@ -98,9 +98,9 @@ export default function NavBar() {
               <AppBar position="static" sx={{backgroundColor: theme.palette.primary.main}}>
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
                   <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#FFFFFF' }}>
-                    <Image src="https://flowbite.com/docs/images/logo.svg" alt="Infinito Consultores Logo" width={50} height={50} />
+                    <Image src="https://flowbite.com/docs/images/logo.svg" alt="RecluTalento Logo" width={50} height={50} />
                     <Typography variant="h6" style={{ marginLeft: '8px' }}>
-                      Infinito Consultores
+                      RecluTalento
                     </Typography>
                   </Link>
                   {session ? (<>

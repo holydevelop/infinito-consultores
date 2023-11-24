@@ -4,7 +4,7 @@ import { Providers } from '@/redux/providers'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Reclutalento',
+  title: 'RecluTalento',
   description: 'Búsquedas eficientes y eficaces de talentos',
 }
 

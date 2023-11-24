@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, Button, Grid, createTheme } from '@mui/material';
+import { Card, CardContent, Typography, Button, Grid, createTheme, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import { useAppSelector } from '@/redux/hooks';
 import { Postular } from '@/utils/api';
 
@@ -50,9 +50,14 @@ const JobList = ({ jobs }: JobListProps) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
   const user = useAppSelector(state => state.user.id)
+  const [openDialog, setOpenDialog] = useState(false);
   const handlePostularClick = (offerid: string, id: string) =>
   {
+    setOpenDialog(true);
     Postular(offerid,id);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
 
@@ -91,6 +96,10 @@ const JobList = ({ jobs }: JobListProps) => {
             </CardContent>
           </Card>
         ))}
+        <Dialog open={openDialog} fullWidth maxWidth="sm" onClose={handleCloseDialog} style={{ minWidth: '25%', minHeight: '50%' }}>
+        <DialogTitle>Postulación Exitosa</DialogTitle>
+        <DialogContent>Tu postulación ha sido registrada exitosamente ;)</DialogContent>
+        </Dialog>
     </div>
   );
 
